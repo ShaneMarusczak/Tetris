@@ -29,6 +29,11 @@ body {
   background-color: var(--my-grey);
 }
 
+.moving,
+.placed {
+  background-color: blue;
+}
+
 #btns {
   display: flex;
   justify-content: space-around;

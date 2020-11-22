@@ -8,6 +8,11 @@
     <meta name="viewport" content="width=800" />
     <title>Tetris</title>
     <link rel="stylesheet" href="css/style.css" />
+    <script
+      type="text/javascript"
+      src="https://marusczak.com/BuildingBlocks/js/buildingBlocks.min.js"
+      defer
+    ></script>
     <script src="js/tetris.js" defer></script>
   </head>
   <body>
@@ -20,7 +25,9 @@
     <footer>
       <div id="btns">
         <div id="startBtn" class="btn">Start</div>
-        <div id="startOverBtn" class="btn">Start Over</div>
+        <div id="startOverBtn" class="btn" onclick="location.reload()">
+          Start Over
+        </div>
       </div>
       <p id="updateText">Last Updated: November 21, 2020</p>
     </footer>
