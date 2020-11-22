@@ -40,9 +40,10 @@
   };
 
   const drawPiece = () => {
+    const col = window.randomIntFromInterval(0, 9);
     for (let i = 0; i < dimensions.pieceSize; i++) {
-      document.getElementById("cell-1-" + i).classList.add("moving");
-      gameGrid[1][i] = 1;
+      document.getElementById("cell-" + col + "-" + i).classList.add("moving");
+      gameGrid[col][i] = 1;
     }
     drawingMode = false;
     fallingMode = true;
