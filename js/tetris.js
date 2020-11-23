@@ -13,6 +13,65 @@
   };
   const gameGrid = [];
 
+  const piecesMoving = () => Array.from(document.querySelectorAll(".moving"));
+
+  const handlePlayerInput = (e) => {
+    if (e.key === "ArrowLeft") {
+      movePieceHorizonal(-1);
+    } else if (e.key === "ArrowRight") {
+      movePieceHorizonal(1);
+    }
+  };
+
+  const movePieceHorizonal = (dir) => {
+    const locations = [];
+    if (dir === -1) {
+      if (piecesMoving().some((item) => Number(item.id.charAt(5)) === 0)) {
+        return;
+      }
+      let shouldReturn = false;
+      piecesMoving().forEach((item) => {
+        const [col, row] = getRowAndCol(item.id);
+        if (gameGrid[col - 1][row] === 2) {
+          shouldReturn = true;
+        }
+      });
+      if (shouldReturn) {
+        return;
+      }
+    }
+    if (dir === 1) {
+      if (piecesMoving().some((item) => Number(item.id.charAt(5)) === 9)) {
+        return;
+      }
+      let shouldReturn = false;
+      piecesMoving().forEach((item) => {
+        const [col, row] = getRowAndCol(item.id);
+        if (gameGrid[col + 1][row] === 2) {
+          shouldReturn = true;
+        }
+      });
+      if (shouldReturn) {
+        return;
+      }
+    }
+    piecesMoving().forEach((item) => {
+      const [col, row] = getRowAndCol(item.id);
+      document
+        .getElementById("cell-" + col + "-" + row)
+        .classList.remove("moving");
+      gameGrid[col][row] = 0;
+      locations.push([col, row]);
+    });
+
+    locations.forEach((loc) => {
+      document
+        .getElementById("cell-" + (loc[0] + dir) + "-" + loc[1])
+        .classList.add("moving");
+      gameGrid[loc[0] + dir][loc[1]] = 1;
+    });
+  };
+
   const gameStartHandler = () => {
     gameStarted = true;
     drawingMode = true;
@@ -40,28 +99,26 @@
   };
 
   const drawPiece = () => {
-    const col = window.randomIntFromInterval(0, 9);
+    const col = 1;
     for (let i = 0; i < dimensions.pieceSize; i++) {
-      document.getElementById("cell-" + col + "-" + i).classList.add("moving");
-      gameGrid[col][i] = 1;
+      document
+        .getElementById("cell-" + (col + i) + "-" + 0)
+        .classList.add("moving");
+      gameGrid[col + i][0] = 1;
     }
     drawingMode = false;
     fallingMode = true;
   };
 
   const movePiece = () => {
-    const peicesMoving = Array.from(document.querySelectorAll(".moving"));
-    const test = checkCanNotMove(peicesMoving);
-    if (test) {
+    if (checkCanNotMove()) {
       fallingMode = false;
       placingMode = true;
       return;
     }
     const locations = [];
-    peicesMoving.forEach((item) => {
-      const splitId = item.id.split("-");
-      const col = Number(splitId[1]);
-      const row = Number(splitId[2]);
+    piecesMoving().forEach((item) => {
+      const [col, row] = getRowAndCol(item.id);
       document
         .getElementById("cell-" + col + "-" + row)
         .classList.remove("moving");
@@ -76,19 +133,11 @@
     });
   };
 
-  const checkCanNotMove = (arrOfMovers) => {
+  const checkCanNotMove = () => {
     let rv = false;
-    arrOfMovers.forEach((mover) => {
-      const splitId = mover.id.split("-");
-      const col = Number(splitId[1]);
-      const row = Number(splitId[2]);
-      if (
-        row === 19 ||
-        (gameGrid[col][row + 1] === 1 &&
-          document
-            .getElementById("cell-" + col + "-" + (row + 1))
-            .classList.contains("placed"))
-      ) {
+    piecesMoving().forEach((mover) => {
+      const [col, row] = getRowAndCol(mover.id);
+      if (row === 19 || gameGrid[col][row + 1] === 2) {
         rv = true;
       }
     });
@@ -96,12 +145,21 @@
   };
 
   const placePiece = () => {
-    document.querySelectorAll(".moving").forEach((item) => {
+    piecesMoving().forEach((item) => {
       item.classList.remove("moving");
       item.classList.add("placed");
+      const [col, row] = getRowAndCol(item.id);
+      gameGrid[col][row] = 2;
     });
     placingMode = false;
     drawingMode = true;
+  };
+
+  const getRowAndCol = (id) => {
+    const splitId = id.split("-");
+    const col = Number(splitId[1]);
+    const row = Number(splitId[2]);
+    return [col, row];
   };
 
   (() => {
@@ -122,5 +180,6 @@
     document
       .getElementById("startBtn")
       .addEventListener("click", gameStartHandler);
+    document.addEventListener("keydown", handlePlayerInput);
   })();
 })();
