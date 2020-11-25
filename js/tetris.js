@@ -8,12 +8,14 @@
   const dimensions = {
     rows: 20,
     columns: 10,
-    clockSpeed: 800,
+    clockSpeed: 200,
     pieceSize: 4,
   };
   const gameGrid = [];
 
   const piecesMoving = () => Array.from(document.querySelectorAll(".moving"));
+
+  const getCellId = (col, row) => "cell-" + col + "-" + row;
 
   const handlePlayerInput = (e) => {
     if (e.key === "ArrowLeft") {
@@ -57,16 +59,14 @@
     }
     piecesMoving().forEach((item) => {
       const [col, row] = getRowAndCol(item.id);
-      document
-        .getElementById("cell-" + col + "-" + row)
-        .classList.remove("moving");
+      document.getElementById(getCellId(col, row)).classList.remove("moving");
       gameGrid[col][row] = 0;
       locations.push([col, row]);
     });
 
     locations.forEach((loc) => {
       document
-        .getElementById("cell-" + (loc[0] + dir) + "-" + loc[1])
+        .getElementById(getCellId(loc[0] + dir, loc[1]))
         .classList.add("moving");
       gameGrid[loc[0] + dir][loc[1]] = 1;
     });
@@ -80,6 +80,54 @@
 
   const gameOverHandler = () => {
     gameOver = true;
+  };
+
+  const checkRows = () => {
+    for (let row = dimensions.rows - 1; row >= 0; row--) {
+      let rowCounter = 0;
+      for (let col = 0; col < dimensions.columns; col++) {
+        if (gameGrid[col][row] === 2) {
+          rowCounter++;
+        }
+      }
+      if (rowCounter === dimensions.columns) {
+        clearRow(row);
+        shiftBoardDown(row);
+        row++;
+      }
+    }
+  };
+
+  const shiftBoardDown = (clearedRow) => {
+    for (let row = dimensions.rows - 1; row >= 0; row--) {
+      for (let col = 0; col < dimensions.columns; col++) {
+        if (row > clearedRow) {
+          continue;
+        } else if (row <= clearedRow && row !== 0) {
+          document
+            .getElementById(getCellId(col, row))
+            .classList.remove("placed");
+          gameGrid[col][row] = gameGrid[col][row - 1];
+          if (gameGrid[col][row] === 2) {
+            document
+              .getElementById(getCellId(col, row))
+              .classList.add("placed");
+          }
+        } else {
+          document
+            .getElementById(getCellId(col, row))
+            .classList.remove("placed");
+          gameGrid[col][row] = 0;
+        }
+      }
+    }
+  };
+
+  const clearRow = (row) => {
+    for (let col = 0; col < dimensions.columns; col++) {
+      gameGrid[col][row] = 0;
+      document.getElementById(getCellId(col, row)).classList.remove("placed");
+    }
   };
 
   const gameClock = () => {
@@ -101,10 +149,8 @@
   const drawPiece = () => {
     const col = 1;
     for (let i = 0; i < dimensions.pieceSize; i++) {
-      document
-        .getElementById("cell-" + (col + i) + "-" + 0)
-        .classList.add("moving");
-      gameGrid[col + i][0] = 1;
+      document.getElementById(getCellId(col, i)).classList.add("moving");
+      gameGrid[col][i] = 1;
     }
     drawingMode = false;
     fallingMode = true;
@@ -119,15 +165,13 @@
     const locations = [];
     piecesMoving().forEach((item) => {
       const [col, row] = getRowAndCol(item.id);
-      document
-        .getElementById("cell-" + col + "-" + row)
-        .classList.remove("moving");
+      document.getElementById(getCellId(col, row)).classList.remove("moving");
       gameGrid[col][row] = 0;
       locations.push([col, row]);
     });
     locations.forEach((loc) => {
       document
-        .getElementById("cell-" + loc[0] + "-" + (loc[1] + 1))
+        .getElementById(getCellId(loc[0], loc[1] + 1))
         .classList.add("moving");
       gameGrid[loc[0]][loc[1] + 1] = 1;
     });
@@ -151,6 +195,7 @@
       const [col, row] = getRowAndCol(item.id);
       gameGrid[col][row] = 2;
     });
+    checkRows();
     placingMode = false;
     drawingMode = true;
   };
