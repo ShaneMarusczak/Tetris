@@ -181,7 +181,7 @@
     let rv = false;
     piecesMoving().forEach((mover) => {
       const [col, row] = getRowAndCol(mover.id);
-      if (row === 19 || gameGrid[col][row + 1] === 2) {
+      if (row === dimensions.rows - 1 || gameGrid[col][row + 1] === 2) {
         rv = true;
       }
     });
