@@ -8,31 +8,35 @@
   const dimensions = {
     rows: 20,
     columns: 10,
-    clockSpeed: 200,
+    clockSpeed: 600,
     pieceSize: 4,
   };
   const gameGrid = [];
 
-  const piecesMoving = () => Array.from(document.querySelectorAll(".moving"));
+  const cellsMoving = () => Array.from(document.querySelectorAll(".moving"));
 
-  const getCellId = (col, row) => "cell-" + col + "-" + row;
+  const getCellId = (col, row) => col + "-" + row;
 
   const handlePlayerInput = (e) => {
-    if (e.key === "ArrowLeft") {
-      movePieceHorizonal(-1);
-    } else if (e.key === "ArrowRight") {
-      movePieceHorizonal(1);
+    switch (e.key) {
+      case "ArrowLeft":
+        movePieceHorizonal(-1);
+        break;
+      case "ArrowRight":
+        movePieceHorizonal(1);
+        break;
     }
   };
 
   const movePieceHorizonal = (dir) => {
     const locations = [];
+    const movingCells = cellsMoving();
     if (dir === -1) {
-      if (piecesMoving().some((item) => Number(item.id.charAt(5)) === 0)) {
+      if (movingCells.some((item) => Number(item.id.charAt(0)) === 0)) {
         return;
       }
       let shouldReturn = false;
-      piecesMoving().forEach((item) => {
+      movingCells.forEach((item) => {
         const [col, row] = getRowAndCol(item.id);
         if (gameGrid[col - 1][row] === 2) {
           shouldReturn = true;
@@ -43,11 +47,15 @@
       }
     }
     if (dir === 1) {
-      if (piecesMoving().some((item) => Number(item.id.charAt(5)) === 9)) {
+      if (
+        movingCells.some(
+          (item) => Number(item.id.charAt(0)) === dimensions.columns - 1
+        )
+      ) {
         return;
       }
       let shouldReturn = false;
-      piecesMoving().forEach((item) => {
+      movingCells.forEach((item) => {
         const [col, row] = getRowAndCol(item.id);
         if (gameGrid[col + 1][row] === 2) {
           shouldReturn = true;
@@ -57,7 +65,7 @@
         return;
       }
     }
-    piecesMoving().forEach((item) => {
+    movingCells.forEach((item) => {
       const [col, row] = getRowAndCol(item.id);
       document.getElementById(getCellId(col, row)).classList.remove("moving");
       gameGrid[col][row] = 0;
@@ -146,24 +154,117 @@
     });
   };
 
-  const drawPiece = () => {
-    const col = 1;
+  const drawStraightTetrimino = (col) => {
     for (let i = 0; i < dimensions.pieceSize; i++) {
       document.getElementById(getCellId(col, i)).classList.add("moving");
       gameGrid[col][i] = 1;
     }
+  };
+
+  const drawSquareTetrimno = (col) => {
+    for (let i = 0; i < dimensions.pieceSize / 2; i++) {
+      document.getElementById(getCellId(col, i)).classList.add("moving");
+      gameGrid[col][i] = 1;
+    }
+    for (let i = 0; i < dimensions.pieceSize / 2; i++) {
+      document.getElementById(getCellId(col + 1, i)).classList.add("moving");
+      gameGrid[col + 1][i] = 1;
+    }
+  };
+
+  const drawLTetrimno = (col) => {
+    for (let i = 0; i < dimensions.pieceSize - 1; i++) {
+      document.getElementById(getCellId(col, i)).classList.add("moving");
+      gameGrid[col][i] = 1;
+    }
+    document.getElementById(getCellId(col + 1, 2)).classList.add("moving");
+    gameGrid[col + 1][2] = 1;
+  };
+
+  const drawMirroredLTetrimno = (col) => {
+    for (let i = 0; i < dimensions.pieceSize - 1; i++) {
+      document.getElementById(getCellId(col, i)).classList.add("moving");
+      gameGrid[col][i] = 1;
+    }
+    document.getElementById(getCellId(col - 1, 2)).classList.add("moving");
+    gameGrid[col - 1][2] = 1;
+  };
+
+  const drawTTetrimno = (col) => {
+    for (let i = 0; i < dimensions.pieceSize - 1; i++) {
+      document.getElementById(getCellId(col, i)).classList.add("moving");
+      gameGrid[col][i] = 1;
+    }
+    document.getElementById(getCellId(col - 1, 1)).classList.add("moving");
+    gameGrid[col - 1][1] = 1;
+  };
+
+  const drawZTetrimino = (col) => {
+    for (let i = 0; i < dimensions.pieceSize / 2; i++) {
+      document.getElementById(getCellId(col, i)).classList.add("moving");
+      gameGrid[col][i] = 1;
+    }
+    for (let i = 0; i < dimensions.pieceSize / 2; i++) {
+      document
+        .getElementById(getCellId(col + 1, i + 1))
+        .classList.add("moving");
+      gameGrid[col + 1][i + 1] = 1;
+    }
+  };
+
+  const drawMirroredZTetrimino = (col) => {
+    for (let i = 0; i < dimensions.pieceSize / 2; i++) {
+      document.getElementById(getCellId(col, i)).classList.add("moving");
+      gameGrid[col][i] = 1;
+    }
+    for (let i = 0; i < dimensions.pieceSize / 2; i++) {
+      document
+        .getElementById(getCellId(col - 1, i + 1))
+        .classList.add("moving");
+      gameGrid[col - 1][i + 1] = 1;
+    }
+  };
+
+  const drawPiece = () => {
+    const col = 2;
+    const tetriminoToDraw = window.randomIntFromInterval(0, 6);
+    switch (tetriminoToDraw) {
+      case 0:
+        drawStraightTetrimino(col);
+        break;
+      case 1:
+        drawSquareTetrimno(col);
+        break;
+      case 2:
+        drawLTetrimno(col);
+        break;
+      case 3:
+        drawMirroredLTetrimno(col);
+        break;
+      case 4:
+        drawTTetrimno(col);
+        break;
+      case 5:
+        drawZTetrimino(col);
+        break;
+      case 6:
+        drawMirroredZTetrimino(col);
+        break;
+    }
+
     drawingMode = false;
     fallingMode = true;
   };
 
   const movePiece = () => {
-    if (checkCanNotMove()) {
+    const movingCells = cellsMoving();
+    if (checkCanNotMove(movingCells)) {
       fallingMode = false;
       placingMode = true;
       return;
     }
     const locations = [];
-    piecesMoving().forEach((item) => {
+    movingCells.forEach((item) => {
       const [col, row] = getRowAndCol(item.id);
       document.getElementById(getCellId(col, row)).classList.remove("moving");
       gameGrid[col][row] = 0;
@@ -177,9 +278,9 @@
     });
   };
 
-  const checkCanNotMove = () => {
+  const checkCanNotMove = (movingCells) => {
     let rv = false;
-    piecesMoving().forEach((mover) => {
+    movingCells.forEach((mover) => {
       const [col, row] = getRowAndCol(mover.id);
       if (row === dimensions.rows - 1 || gameGrid[col][row + 1] === 2) {
         rv = true;
@@ -189,7 +290,7 @@
   };
 
   const placePiece = () => {
-    piecesMoving().forEach((item) => {
+    cellsMoving().forEach((item) => {
       item.classList.remove("moving");
       item.classList.add("placed");
       const [col, row] = getRowAndCol(item.id);
@@ -202,8 +303,8 @@
 
   const getRowAndCol = (id) => {
     const splitId = id.split("-");
-    const col = Number(splitId[1]);
-    const row = Number(splitId[2]);
+    const col = Number(splitId[0]);
+    const row = Number(splitId[1]);
     return [col, row];
   };
 
@@ -216,7 +317,7 @@
       gameGrid.push([]);
       for (let j = 0; j < dimensions.rows; j++) {
         const cell = document.createElement("div");
-        cell.id = "cell-" + i + "-" + j;
+        cell.id = i + "-" + j;
         cell.classList.add("cell");
         col.appendChild(cell);
         gameGrid[i].push(0);
