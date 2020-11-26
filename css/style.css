@@ -29,9 +29,32 @@ body {
   background-color: var(--my-grey);
 }
 
-.moving,
-.placed {
+.blue {
   background-color: blue;
+}
+
+.red {
+  background-color: red;
+}
+
+.yellow {
+  background-color: yellow;
+}
+
+.green {
+  background-color: green;
+}
+
+.cyan {
+  background-color: cyan;
+}
+
+.purple {
+  background-color: purple;
+}
+
+.orange {
+  background-color: orange;
 }
 
 #btns {
