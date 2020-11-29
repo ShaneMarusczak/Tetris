@@ -4,11 +4,14 @@
   let drawingMode = false;
   let fallingMode = false;
   let placingMode = false;
+  let canRotate = true;
+  let fallingPiece = "";
+  let fallingPieceRotationalState = 1;
   const gameBoardContainer = document.getElementById("gameBoard");
   const dimensions = {
     rows: 20,
     columns: 10,
-    clockSpeed: 200,
+    clockSpeed: 1000,
     pieceSize: 4,
   };
   const gameGrid = [];
@@ -25,7 +28,132 @@
       case "ArrowRight":
         movePieceHorizonal(1);
         break;
+      case " ":
+        speedUpDrop();
+        break;
+      case "r":
+      case "R":
+        rotate();
+        break;
     }
+  };
+
+  const addColorandMovingClass = (col, row, color) => {
+    document.getElementById(getCellId(col, row)).classList.add("moving");
+    document.getElementById(getCellId(col, row)).classList.add(color);
+    gameGrid[col][row] = 1;
+  };
+
+  const rotate = () => {
+    if (!canRoate) {
+      return;
+    }
+    const locations = [];
+    const movingCells = cellsMoving();
+    movingCells.forEach((item) => {
+      const [col, row] = getRowAndCol(item.id);
+      document.getElementById(getCellId(col, row)).classList.remove("moving");
+      gameGrid[col][row] = 0;
+      locations.push([col, row]);
+      removeColors(item);
+    });
+    switch (fallingPiece) {
+      case "st":
+        rotateStraight(locations);
+        break;
+      case "tt":
+        rotateT(locations);
+        break;
+      case "rl":
+        rotateRL(locations);
+        break;
+    }
+  };
+
+  const rotateRL = (locs) => {
+    if (fallingPieceRotationalState === 1) {
+      addColorandMovingClass(locs[0][0] + 2, locs[0][1] + 2, "orange");
+      addColorandMovingClass(locs[1][0] + 1, locs[1][1] + 1, "orange");
+      addColorandMovingClass(locs[2][0], locs[2][1], "orange");
+      addColorandMovingClass(locs[3][0] - 1, locs[3][1] + 1, "orange");
+      fallingPieceRotationalState++;
+    } else if (fallingPieceRotationalState === 2) {
+      addColorandMovingClass(locs[0][0], locs[0][1], "orange");
+      addColorandMovingClass(locs[1][0] - 1, locs[1][1] - 1, "orange");
+      addColorandMovingClass(locs[2][0] - 1, locs[2][1] + 1, "orange");
+      addColorandMovingClass(locs[3][0] - 2, locs[3][1] + 2, "orange");
+      fallingPieceRotationalState++;
+    } else if (fallingPieceRotationalState === 3) {
+      addColorandMovingClass(locs[0][0] + 1, locs[0][1] - 1, "orange");
+      addColorandMovingClass(locs[1][0], locs[1][1], "orange");
+      addColorandMovingClass(locs[2][0] - 1, locs[2][1] - 1, "orange");
+      addColorandMovingClass(locs[3][0] - 2, locs[3][1] - 2, "orange");
+      fallingPieceRotationalState++;
+    } else if (fallingPieceRotationalState === 4) {
+      addColorandMovingClass(locs[0][0] + 2, locs[0][1] - 2, "orange");
+      addColorandMovingClass(locs[1][0] + 1, locs[1][1] - 1, "orange");
+      addColorandMovingClass(locs[2][0] + 1, locs[2][1] + 1, "orange");
+      addColorandMovingClass(locs[3][0], locs[3][1], "orange");
+      fallingPieceRotationalState = 1;
+    }
+  };
+
+  const rotateT = (locations) => {
+    if (fallingPieceRotationalState === 1) {
+      addColorandMovingClass(locations[0][0], locations[0][1], "blue");
+      addColorandMovingClass(locations[1][0], locations[1][1], "blue");
+      addColorandMovingClass(locations[2][0], locations[2][1], "blue");
+      addColorandMovingClass(locations[3][0] + 1, locations[3][1] - 1, "blue");
+      fallingPieceRotationalState++;
+    } else if (fallingPieceRotationalState === 2) {
+      addColorandMovingClass(locations[0][0] + 1, locations[0][1] + 1, "blue");
+      addColorandMovingClass(locations[1][0], locations[1][1], "blue");
+      addColorandMovingClass(locations[2][0], locations[2][1], "blue");
+      addColorandMovingClass(locations[3][0], locations[3][1], "blue");
+      fallingPieceRotationalState++;
+    } else if (fallingPieceRotationalState === 3) {
+      addColorandMovingClass(locations[0][0] - 1, locations[0][1] + 1, "blue");
+      addColorandMovingClass(locations[1][0], locations[1][1], "blue");
+      addColorandMovingClass(locations[2][0], locations[2][1], "blue");
+      addColorandMovingClass(locations[3][0], locations[3][1], "blue");
+      fallingPieceRotationalState++;
+    } else if (fallingPieceRotationalState === 4) {
+      addColorandMovingClass(locations[0][0], locations[0][1], "blue");
+      addColorandMovingClass(locations[1][0], locations[1][1], "blue");
+      addColorandMovingClass(locations[2][0], locations[2][1], "blue");
+      addColorandMovingClass(locations[3][0] - 1, locations[3][1] - 1, "blue");
+      fallingPieceRotationalState = 1;
+    }
+  };
+
+  const rotateStraight = (locations) => {
+    if (
+      fallingPieceRotationalState === 1 ||
+      fallingPieceRotationalState === 3
+    ) {
+      addColorandMovingClass(locations[0][0] - 1, locations[0][1] + 1, "cyan");
+      addColorandMovingClass(locations[1][0], locations[1][1], "cyan");
+      addColorandMovingClass(locations[2][0] + 1, locations[2][1] - 1, "cyan");
+      addColorandMovingClass(locations[3][0] + 2, locations[3][1] - 2, "cyan");
+      fallingPieceRotationalState++;
+    } else {
+      addColorandMovingClass(locations[0][0] + 1, locations[0][1] - 1, "cyan");
+      addColorandMovingClass(locations[1][0], locations[1][1], "cyan");
+      addColorandMovingClass(locations[2][0] - 1, locations[2][1] + 1, "cyan");
+      addColorandMovingClass(locations[3][0] - 2, locations[3][1] + 2, "cyan");
+      fallingPieceRotationalState++;
+    }
+    if (fallingPieceRotationalState === 5) {
+      fallingPieceRotationalState = 1;
+    }
+  };
+
+  const speedUpDrop = () => {
+    dimensions.clockSpeed = 100;
+  };
+
+  const resetSpeed = () => {
+    dimensions.clockSpeed = 1000;
   };
 
   const movePieceHorizonal = (dir) => {
@@ -168,6 +296,7 @@
 
       gameGrid[col][i] = 1;
     }
+    fallingPiece = "st";
   };
 
   const drawSquareTetrimno = (col) => {
@@ -183,6 +312,7 @@
 
       gameGrid[col + 1][i] = 1;
     }
+    fallingPiece = "sq";
   };
 
   const drawLTetrimno = (col) => {
@@ -196,6 +326,7 @@
     document.getElementById(getCellId(col + 1, 2)).classList.add("orange");
 
     gameGrid[col + 1][2] = 1;
+    fallingPiece = "rl";
   };
 
   const drawMirroredLTetrimno = (col) => {
@@ -209,6 +340,7 @@
     document.getElementById(getCellId(col - 1, 2)).classList.add("green");
 
     gameGrid[col - 1][2] = 1;
+    fallingPiece = "ml";
   };
 
   const drawTTetrimno = (col) => {
@@ -222,6 +354,7 @@
     document.getElementById(getCellId(col - 1, 1)).classList.add("blue");
 
     gameGrid[col - 1][1] = 1;
+    fallingPiece = "tt";
   };
 
   const drawZTetrimino = (col) => {
@@ -240,6 +373,7 @@
         .classList.add("purple");
       gameGrid[col + 1][i + 1] = 1;
     }
+    fallingPiece = "rz";
   };
 
   const drawMirroredZTetrimino = (col) => {
@@ -256,34 +390,36 @@
       document.getElementById(getCellId(col - 1, i + 1)).classList.add("red");
       gameGrid[col - 1][i + 1] = 1;
     }
+    fallingPiece = "mz";
   };
 
   const drawPiece = () => {
     const col = 2;
     const tetriminoToDraw = window.randomIntFromInterval(0, 6);
-    switch (tetriminoToDraw) {
-      case 0:
-        drawStraightTetrimino(col);
-        break;
-      case 1:
-        drawSquareTetrimno(col);
-        break;
-      case 2:
-        drawLTetrimno(col);
-        break;
-      case 3:
-        drawMirroredLTetrimno(col);
-        break;
-      case 4:
-        drawTTetrimno(col);
-        break;
-      case 5:
-        drawZTetrimino(col);
-        break;
-      case 6:
-        drawMirroredZTetrimino(col);
-        break;
-    }
+    // switch (tetriminoToDraw) {
+    //   case 0:
+    //     drawStraightTetrimino(col);
+    //     break;
+    //   case 1:
+    //     drawSquareTetrimno(col);
+    //     break;
+    //   case 2:
+    //     drawLTetrimno(col);
+    //     break;
+    //   case 3:
+    //     drawMirroredLTetrimno(col);
+    //     break;
+    //   case 4:
+    //     drawTTetrimno(col);
+    //     break;
+    //   case 5:
+    //     drawZTetrimino(col);
+    //     break;
+    //   case 6:
+    //     drawMirroredZTetrimino(col);
+    //     break;
+    // }
+    drawLTetrimno(col);
     drawingMode = false;
     fallingMode = true;
   };
@@ -336,6 +472,7 @@
     checkRows();
     placingMode = false;
     drawingMode = true;
+    fallingPieceRotationalState = 1;
   };
 
   const getRowAndCol = (id) => {
@@ -345,10 +482,7 @@
     return [col, row];
   };
 
-  const removeAndReturnColorClasses = (col, row) => {
-    const elem = document.getElementById(getCellId(col, row));
-    const elemAbove = document.getElementById(getCellId(col, row - 1));
-
+  const removeColors = (elem) => {
     if (elem.classList.contains("blue")) {
       elem.classList.remove("blue");
     } else if (elem.classList.contains("red")) {
@@ -364,6 +498,13 @@
     } else if (elem.classList.contains("orange")) {
       elem.classList.remove("orange");
     }
+  };
+
+  const removeAndReturnColorClasses = (col, row) => {
+    const elem = document.getElementById(getCellId(col, row));
+    const elemAbove = document.getElementById(getCellId(col, row - 1));
+
+    removeColors(elem);
 
     if (elemAbove.classList.contains("blue")) {
       return "blue";
@@ -440,5 +581,7 @@
       .getElementById("startBtn")
       .addEventListener("click", gameStartHandler);
     document.addEventListener("keydown", handlePlayerInput);
+    document.addEventListener("keyup", resetSpeed);
+    window.onkeydown = (e) => !(e.key === " " && e.target == document.body);
   })();
 })();
