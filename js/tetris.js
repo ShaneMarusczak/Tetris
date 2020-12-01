@@ -33,6 +33,9 @@
         break;
       case "r":
       case "R":
+        if (!fallingMode) {
+          break;
+        }
         rotate();
         break;
     }
@@ -44,10 +47,29 @@
     gameGrid[col][row] = 1;
   };
 
-  const rotate = () => {
-    if (!canRoate) {
-      return;
+  const checkCellsTo = (cellsTo) => {
+    if (
+      cellsTo.some(
+        (cell) =>
+          cell[0] < 0 ||
+          cell[0] > dimensions.columns - 1 ||
+          cell[1] < 0 ||
+          cell[1] > dimensions.rows - 1 ||
+          gameGrid[cell[0]][cell[1]] !== 0
+      )
+    ) {
+      return true;
     }
+    return false;
+  };
+
+  const revertCells = (cells, color) => {
+    cells.forEach((cell) => {
+      addColorandMovingClass(cell[0], cell[1], color);
+    });
+  };
+
+  const rotate = () => {
     const locations = [];
     const movingCells = cellsMoving();
     movingCells.forEach((item) => {
@@ -57,73 +79,110 @@
       locations.push([col, row]);
       removeColors(item);
     });
-    switch (fallingPiece) {
-      case "st":
-        rotateStraight(locations);
-        break;
-      case "tt":
-        rotateT(locations);
-        break;
-      case "rl":
-        rotateRL(locations);
-        break;
+    if (fallingPiece === "st") {
+      const cellsTo = getStraightCells(locations);
+      if (checkCellsTo(cellsTo)) {
+        revertCells(locations, "cyan");
+        return;
+      }
+      rotateCells(cellsTo, "cyan");
+    } else if (fallingPiece === "tt") {
+      const cellsTo = getTTCells(locations);
+      if (checkCellsTo(cellsTo)) {
+        revertCells(locations, "blue");
+        return;
+      }
+      rotateCells(cellsTo, "blue");
+    } else if (fallingPiece === "rl") {
+      const cellsTo = getRLCells(locations);
+      if (checkCellsTo(cellsTo)) {
+        revertCells(locations, "orange");
+        return;
+      }
+      rotateCells(cellsTo, "orange");
     }
   };
 
-  const rotateRL = (locs) => {
-    if (fallingPieceRotationalState === 1) {
-      addColorandMovingClass(locs[0][0] + 2, locs[0][1] + 2, "orange");
-      addColorandMovingClass(locs[1][0] + 1, locs[1][1] + 1, "orange");
-      addColorandMovingClass(locs[2][0], locs[2][1], "orange");
-      addColorandMovingClass(locs[3][0] - 1, locs[3][1] + 1, "orange");
-      fallingPieceRotationalState++;
-    } else if (fallingPieceRotationalState === 2) {
-      addColorandMovingClass(locs[0][0], locs[0][1], "orange");
-      addColorandMovingClass(locs[1][0] - 1, locs[1][1] - 1, "orange");
-      addColorandMovingClass(locs[2][0] - 1, locs[2][1] + 1, "orange");
-      addColorandMovingClass(locs[3][0] - 2, locs[3][1] + 2, "orange");
-      fallingPieceRotationalState++;
-    } else if (fallingPieceRotationalState === 3) {
-      addColorandMovingClass(locs[0][0] + 1, locs[0][1] - 1, "orange");
-      addColorandMovingClass(locs[1][0], locs[1][1], "orange");
-      addColorandMovingClass(locs[2][0] - 1, locs[2][1] - 1, "orange");
-      addColorandMovingClass(locs[3][0] - 2, locs[3][1] - 2, "orange");
-      fallingPieceRotationalState++;
-    } else if (fallingPieceRotationalState === 4) {
-      addColorandMovingClass(locs[0][0] + 2, locs[0][1] - 2, "orange");
-      addColorandMovingClass(locs[1][0] + 1, locs[1][1] - 1, "orange");
-      addColorandMovingClass(locs[2][0] + 1, locs[2][1] + 1, "orange");
-      addColorandMovingClass(locs[3][0], locs[3][1], "orange");
+  const rotateCells = (cellsTo, color) => {
+    fallingPieceRotationalState++;
+    cellsTo.forEach((item) => {
+      addColorandMovingClass(item[0], item[1], color);
+    });
+    if (fallingPieceRotationalState === 5) {
       fallingPieceRotationalState = 1;
     }
   };
 
-  const rotateT = (locations) => {
+  const getRLCells = (locs) => {
+    const cells = [];
     if (fallingPieceRotationalState === 1) {
-      addColorandMovingClass(locations[0][0], locations[0][1], "blue");
-      addColorandMovingClass(locations[1][0], locations[1][1], "blue");
-      addColorandMovingClass(locations[2][0], locations[2][1], "blue");
-      addColorandMovingClass(locations[3][0] + 1, locations[3][1] - 1, "blue");
-      fallingPieceRotationalState++;
+      cells.push([locs[0][0] + 2, locs[0][1] + 2]);
+      cells.push([locs[1][0] + 1, locs[1][1] + 1]);
+      cells.push([locs[2][0], locs[2][1]]);
+      cells.push([locs[3][0] - 1, locs[3][1] + 1]);
     } else if (fallingPieceRotationalState === 2) {
-      addColorandMovingClass(locations[0][0] + 1, locations[0][1] + 1, "blue");
-      addColorandMovingClass(locations[1][0], locations[1][1], "blue");
-      addColorandMovingClass(locations[2][0], locations[2][1], "blue");
-      addColorandMovingClass(locations[3][0], locations[3][1], "blue");
-      fallingPieceRotationalState++;
+      cells.push([locs[0][0], locs[0][1]]);
+      cells.push([locs[1][0] - 1, locs[1][1] - 1]);
+      cells.push([locs[2][0] - 1, locs[2][1] + 1]);
+      cells.push([locs[3][0] - 2, locs[3][1] + 2]);
     } else if (fallingPieceRotationalState === 3) {
-      addColorandMovingClass(locations[0][0] - 1, locations[0][1] + 1, "blue");
-      addColorandMovingClass(locations[1][0], locations[1][1], "blue");
-      addColorandMovingClass(locations[2][0], locations[2][1], "blue");
-      addColorandMovingClass(locations[3][0], locations[3][1], "blue");
-      fallingPieceRotationalState++;
+      cells.push([locs[0][0] + 1, locs[0][1] - 1]);
+      cells.push([locs[1][0], locs[1][1]]);
+      cells.push([locs[2][0] - 1, locs[2][1] - 1]);
+      cells.push([locs[3][0] - 2, locs[3][1] - 2]);
     } else if (fallingPieceRotationalState === 4) {
-      addColorandMovingClass(locations[0][0], locations[0][1], "blue");
-      addColorandMovingClass(locations[1][0], locations[1][1], "blue");
-      addColorandMovingClass(locations[2][0], locations[2][1], "blue");
-      addColorandMovingClass(locations[3][0] - 1, locations[3][1] - 1, "blue");
-      fallingPieceRotationalState = 1;
+      cells.push([locs[0][0] + 2, locs[0][1] - 2]);
+      cells.push([locs[1][0] + 1, locs[1][1] - 1]);
+      cells.push([locs[2][0] + 1, locs[2][1] + 1]);
+      cells.push([locs[3][0], locs[3][1]]);
     }
+    return cells;
+  };
+
+  const getTTCells = (locations) => {
+    const cells = [];
+    if (fallingPieceRotationalState === 1) {
+      cells.push([locations[0][0], locations[0][1]]);
+      cells.push([locations[1][0], locations[1][1]]);
+      cells.push([locations[2][0], locations[2][1]]);
+      cells.push([locations[3][0] + 1, locations[3][1] - 1]);
+    } else if (fallingPieceRotationalState === 2) {
+      cells.push([locations[0][0] + 1, locations[0][1] + 1]);
+      cells.push([locations[1][0], locations[1][1]]);
+      cells.push([locations[2][0], locations[2][1]]);
+      cells.push([locations[3][0], locations[3][1]]);
+    } else if (fallingPieceRotationalState === 3) {
+      cells.push([locations[0][0] - 1, locations[0][1] + 1]);
+      cells.push([locations[1][0], locations[1][1]]);
+      cells.push([locations[2][0], locations[2][1]]);
+      cells.push([locations[3][0], locations[3][1]]);
+    } else if (fallingPieceRotationalState === 4) {
+      cells.push([locations[0][0], locations[0][1]]);
+      cells.push([locations[1][0], locations[1][1]]);
+      cells.push([locations[2][0], locations[2][1]]);
+      cells.push([locations[3][0] - 1, locations[3][1] - 1]);
+    }
+    return cells;
+  };
+
+  const getStraightCells = (locations) => {
+    const cells = [];
+
+    if (
+      fallingPieceRotationalState === 1 ||
+      fallingPieceRotationalState === 3
+    ) {
+      cells.push([locations[0][0] - 1, locations[0][1] + 1]);
+      cells.push([locations[1][0], locations[1][1]]);
+      cells.push([locations[2][0] + 1, locations[2][1] - 1]);
+      cells.push([locations[3][0] + 2, locations[3][1] - 2]);
+    } else {
+      cells.push([locations[0][0] + 1, locations[0][1] - 1]);
+      cells.push([locations[1][0], locations[1][1]]);
+      cells.push([locations[2][0] - 1, locations[2][1] + 1]);
+      cells.push([locations[3][0] - 2, locations[3][1] + 2]);
+    }
+    return cells;
   };
 
   const rotateStraight = (locations) => {
@@ -395,31 +454,30 @@
 
   const drawPiece = () => {
     const col = 2;
-    const tetriminoToDraw = window.randomIntFromInterval(0, 6);
-    // switch (tetriminoToDraw) {
-    //   case 0:
-    //     drawStraightTetrimino(col);
-    //     break;
-    //   case 1:
-    //     drawSquareTetrimno(col);
-    //     break;
-    //   case 2:
-    //     drawLTetrimno(col);
-    //     break;
-    //   case 3:
-    //     drawMirroredLTetrimno(col);
-    //     break;
-    //   case 4:
-    //     drawTTetrimno(col);
-    //     break;
-    //   case 5:
-    //     drawZTetrimino(col);
-    //     break;
-    //   case 6:
-    //     drawMirroredZTetrimino(col);
-    //     break;
-    // }
-    drawLTetrimno(col);
+    const tetriminoToDraw = window.randomIntFromInterval(0, 3);
+    switch (tetriminoToDraw) {
+      case 0:
+        drawStraightTetrimino(col);
+        break;
+      case 1:
+        drawSquareTetrimno(col);
+        break;
+      case 2:
+        drawLTetrimno(col);
+        break;
+      case 3:
+        drawTTetrimno(col);
+        break;
+      case 4:
+        drawMirroredLTetrimno(col);
+        break;
+      case 5:
+        drawZTetrimino(col);
+        break;
+      case 6:
+        drawMirroredZTetrimino(col);
+        break;
+    }
     drawingMode = false;
     fallingMode = true;
   };
