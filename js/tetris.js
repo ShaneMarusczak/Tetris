@@ -48,19 +48,14 @@
   };
 
   const checkCellsTo = (cellsTo) => {
-    if (
-      cellsTo.some(
-        (cell) =>
-          cell[0] < 0 ||
-          cell[0] > dimensions.columns - 1 ||
-          cell[1] < 0 ||
-          cell[1] > dimensions.rows - 1 ||
-          gameGrid[cell[0]][cell[1]] !== 0
-      )
-    ) {
-      return true;
-    }
-    return false;
+    return cellsTo.some(
+      (cell) =>
+        cell[0] < 0 ||
+        cell[0] > dimensions.columns - 1 ||
+        cell[1] < 0 ||
+        cell[1] > dimensions.rows - 1 ||
+        gameGrid[cell[0]][cell[1]] !== 0
+    );
   };
 
   const revertCells = (cells, color) => {
@@ -183,28 +178,6 @@
       cells.push([locations[3][0] - 2, locations[3][1] + 2]);
     }
     return cells;
-  };
-
-  const rotateStraight = (locations) => {
-    if (
-      fallingPieceRotationalState === 1 ||
-      fallingPieceRotationalState === 3
-    ) {
-      addColorandMovingClass(locations[0][0] - 1, locations[0][1] + 1, "cyan");
-      addColorandMovingClass(locations[1][0], locations[1][1], "cyan");
-      addColorandMovingClass(locations[2][0] + 1, locations[2][1] - 1, "cyan");
-      addColorandMovingClass(locations[3][0] + 2, locations[3][1] - 2, "cyan");
-      fallingPieceRotationalState++;
-    } else {
-      addColorandMovingClass(locations[0][0] + 1, locations[0][1] - 1, "cyan");
-      addColorandMovingClass(locations[1][0], locations[1][1], "cyan");
-      addColorandMovingClass(locations[2][0] - 1, locations[2][1] + 1, "cyan");
-      addColorandMovingClass(locations[3][0] - 2, locations[3][1] + 2, "cyan");
-      fallingPieceRotationalState++;
-    }
-    if (fallingPieceRotationalState === 5) {
-      fallingPieceRotationalState = 1;
-    }
   };
 
   const speedUpDrop = () => {
