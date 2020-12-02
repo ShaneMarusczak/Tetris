@@ -95,6 +95,27 @@
         return;
       }
       rotateCells(cellsTo, "orange");
+    } else if (fallingPiece === "ml") {
+      const cellsTo = getMLCells(locations);
+      if (checkCellsTo(cellsTo)) {
+        revertCells(locations, "green");
+        return;
+      }
+      rotateCells(cellsTo, "green");
+    } else if (fallingPiece === "rz") {
+      const cellsTo = getRZCells(locations);
+      if (checkCellsTo(cellsTo)) {
+        revertCells(locations, "purple");
+        return;
+      }
+      rotateCells(cellsTo, "purple");
+    } else if (fallingPiece === "mz") {
+      const cellsTo = getMZCells(locations);
+      if (checkCellsTo(cellsTo)) {
+        revertCells(locations, "red");
+        return;
+      }
+      rotateCells(cellsTo, "red");
     }
   };
 
@@ -106,6 +127,84 @@
     if (fallingPieceRotationalState === 5) {
       fallingPieceRotationalState = 1;
     }
+  };
+
+  const getMZCells = (locs) => {
+    const cells = [];
+    if (fallingPieceRotationalState === 1) {
+      cells.push([locs[0][0] + 1, locs[0][1] - 1]);
+      cells.push([locs[1][0], locs[1][1] - 2]);
+      cells.push([locs[2][0] + 1, locs[2][1] + 1]);
+      cells.push([locs[3][0], locs[3][1]]);
+    } else if (fallingPieceRotationalState === 2) {
+      cells.push([locs[0][0] + 2, locs[0][1]]);
+      cells.push([locs[1][0] + 1, locs[1][1] + 1]);
+      cells.push([locs[2][0], locs[2][1]]);
+      cells.push([locs[3][0] - 1, locs[3][1] + 1]);
+    } else if (fallingPieceRotationalState === 3) {
+      cells.push([locs[0][0], locs[0][1]]);
+      cells.push([locs[1][0] - 1, locs[1][1] - 1]);
+      cells.push([locs[2][0], locs[2][1] + 2]);
+      cells.push([locs[3][0] - 1, locs[3][1] + 1]);
+    } else if (fallingPieceRotationalState === 4) {
+      cells.push([locs[0][0] + 1, locs[0][1] - 1]);
+      cells.push([locs[1][0], locs[1][1]]);
+      cells.push([locs[2][0] - 1, locs[2][1] - 1]);
+      cells.push([locs[3][0] - 2, locs[3][1]]);
+    }
+    return cells;
+  };
+
+  const getRZCells = (locs) => {
+    const cells = [];
+    if (fallingPieceRotationalState === 1) {
+      cells.push([locs[0][0] + 1, locs[0][1] + 1]);
+      cells.push([locs[1][0], locs[1][1]]);
+      cells.push([locs[2][0] - 1, locs[2][1] + 1]);
+      cells.push([locs[3][0] - 2, locs[3][1]]);
+    } else if (fallingPieceRotationalState === 2) {
+      cells.push([locs[0][0], locs[0][1] - 2]);
+      cells.push([locs[1][0], locs[1][1]]);
+      cells.push([locs[2][0] - 1, locs[2][1] - 1]);
+      cells.push([locs[3][0] - 1, locs[3][1] + 1]);
+    } else if (fallingPieceRotationalState === 3) {
+      cells.push([locs[0][0] + 2, locs[0][1]]);
+      cells.push([locs[1][0] + 1, locs[1][1] - 1]);
+      cells.push([locs[2][0], locs[2][1]]);
+      cells.push([locs[3][0] - 1, locs[3][1] - 1]);
+    } else if (fallingPieceRotationalState === 4) {
+      cells.push([locs[0][0] + 1, locs[0][1] - 1]);
+      cells.push([locs[1][0] + 1, locs[1][1] + 1]);
+      cells.push([locs[2][0], locs[2][1]]);
+      cells.push([locs[3][0], locs[3][1] + 2]);
+    }
+    return cells;
+  };
+
+  const getMLCells = (locs) => {
+    const cells = [];
+    if (fallingPieceRotationalState === 1) {
+      cells.push([locs[0][0] + 1, locs[0][1] - 1]);
+      cells.push([locs[1][0] + 2, locs[1][1] + 2]);
+      cells.push([locs[2][0] + 1, locs[2][1] + 1]);
+      cells.push([locs[3][0], locs[3][1]]);
+    } else if (fallingPieceRotationalState === 2) {
+      cells.push([locs[0][0] + 1, locs[0][1] + 1]);
+      cells.push([locs[1][0], locs[1][1]]);
+      cells.push([locs[2][0] - 1, locs[2][1] + 1]);
+      cells.push([locs[3][0] - 2, locs[3][1] + 2]);
+    } else if (fallingPieceRotationalState === 3) {
+      cells.push([locs[0][0], locs[0][1]]);
+      cells.push([locs[1][0] - 1, locs[1][1] - 1]);
+      cells.push([locs[2][0] - 2, locs[2][1] - 2]);
+      cells.push([locs[3][0] - 1, locs[3][1] + 1]);
+    } else if (fallingPieceRotationalState === 4) {
+      cells.push([locs[0][0] + 2, locs[0][1] - 2]);
+      cells.push([locs[1][0] + 1, locs[1][1] - 1]);
+      cells.push([locs[2][0], locs[2][1]]);
+      cells.push([locs[3][0] - 1, locs[3][1] - 1]);
+    }
+    return cells;
   };
 
   const getRLCells = (locs) => {
@@ -253,6 +352,7 @@
 
   const gameOverHandler = () => {
     gameOver = true;
+    window.closableModal("Game Over!");
   };
 
   const checkRows = () => {
@@ -427,7 +527,11 @@
 
   const drawPiece = () => {
     const col = 2;
-    const tetriminoToDraw = window.randomIntFromInterval(0, 3);
+    const tetriminoToDraw = window.randomIntFromInterval(0, 6);
+    if (checkGameOver(tetriminoToDraw)) {
+      gameOverHandler();
+      return;
+    }
     switch (tetriminoToDraw) {
       case 0:
         drawStraightTetrimino(col);
@@ -455,6 +559,58 @@
     fallingMode = true;
   };
 
+  const checkGameOver = (tetriminoToDraw) => {
+    if (tetriminoToDraw === 0) {
+      return (
+        gameGrid[2][0] !== 0 ||
+        gameGrid[2][1] !== 0 ||
+        gameGrid[2][2] !== 0 ||
+        gameGrid[2][3] !== 0
+      );
+    } else if (tetriminoToDraw === 1) {
+      return (
+        gameGrid[2][0] !== 0 ||
+        gameGrid[2][1] !== 0 ||
+        gameGrid[3][0] !== 0 ||
+        gameGrid[3][1] !== 0
+      );
+    } else if (tetriminoToDraw === 2) {
+      return (
+        gameGrid[2][0] !== 0 ||
+        gameGrid[2][1] !== 0 ||
+        gameGrid[2][2] !== 0 ||
+        gameGrid[3][2] !== 0
+      );
+    } else if (tetriminoToDraw === 3) {
+      return (
+        gameGrid[2][0] !== 0 ||
+        gameGrid[2][1] !== 0 ||
+        gameGrid[2][2] !== 0 ||
+        gameGrid[1][1] !== 0
+      );
+    } else if (tetriminoToDraw === 4) {
+      return (
+        gameGrid[2][0] !== 0 ||
+        gameGrid[2][1] !== 0 ||
+        gameGrid[2][2] !== 0 ||
+        gameGrid[1][2] !== 0
+      );
+    } else if (tetriminoToDraw === 5) {
+      return (
+        gameGrid[2][0] !== 0 ||
+        gameGrid[2][1] !== 0 ||
+        gameGrid[3][1] !== 0 ||
+        gameGrid[3][2] !== 0
+      );
+    } else if (tetriminoToDraw === 6) {
+      return (
+        gameGrid[2][0] !== 0 ||
+        gameGrid[2][1] !== 0 ||
+        gameGrid[1][1] !== 0 ||
+        gameGrid[1][2] !== 0
+      );
+    }
+  };
   const movePiece = () => {
     const movingCells = cellsMoving();
     if (checkCanNotMove(movingCells)) {

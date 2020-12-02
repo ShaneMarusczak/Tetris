@@ -7,7 +7,7 @@
   --btn-width: 70px;
   --my-grey: rgb(201, 201, 201, 0.4);
   font-family: "Orbitron", sans-serif !important;
-  background-color: cornsilk;
+  background-color: grey;
 }
 
 body {
@@ -30,31 +30,31 @@ body {
 }
 
 .blue {
-  background-color: blue;
+  background-color: #aec6cf;
 }
 
 .red {
-  background-color: red;
+  background-color: #ff5747;
 }
 
 .yellow {
-  background-color: yellow;
+  background-color: #fff693;
 }
 
 .green {
-  background-color: green;
+  background-color: #9cd9b1;
 }
 
 .cyan {
-  background-color: cyan;
+  background-color: #dffffc;
 }
 
 .purple {
-  background-color: purple;
+  background-color: #b19cd9;
 }
 
 .orange {
-  background-color: orange;
+  background-color: #ffc36d;
 }
 
 #btns {
