@@ -33,6 +33,7 @@
         break;
       case "r":
       case "R":
+      case "ArrowUp":
         if (!fallingMode) {
           break;
         }
