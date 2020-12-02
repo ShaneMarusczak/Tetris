@@ -23,11 +23,25 @@
       src="https://marusczak.com/BuildingBlocks/js/closableModal.min.js"
       defer
     ></script>
-    <script src="js/tetris.js" defer></script>
+    <script src="js/tetris.min.js" defer></script>
   </head>
   <body>
     <header>
       <h1>Tetris</h1>
+      <a
+        id="homeLink"
+        href="https://marusczak.com/Games-Home-Page"
+        rel="noreferrer"
+        ><img id="homeIcon" src="images/house-icon.png"
+      /></a>
+
+      <a
+        id="gitHubLink"
+        href="https://github.com/ShaneMarusczak/Tetris"
+        target="_blank"
+        rel="noreferrer"
+        ><img id="githubicon" src="images/github-icon.png"
+      /></a>
     </header>
     <main>
       <div id="gameBoard"></div>
@@ -39,7 +53,7 @@
           Start Over
         </div>
       </div>
-      <p id="updateText">Last Updated: November 29, 2020</p>
+      <p id="updateText">Last Updated: December 1, 2020</p>
     </footer>
   </body>
 </html>
