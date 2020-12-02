@@ -284,8 +284,10 @@
     dimensions.clockSpeed = 100;
   };
 
-  const resetSpeed = () => {
-    dimensions.clockSpeed = 1000;
+  const resetSpeed = (e) => {
+    if (e.key === " ") {
+      dimensions.clockSpeed = 1000;
+    }
   };
 
   const movePieceHorizonal = (dir) => {
