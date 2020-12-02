@@ -4,9 +4,9 @@
   let drawingMode = false;
   let fallingMode = false;
   let placingMode = false;
-  let canRotate = true;
   let fallingPiece = "";
   let fallingPieceRotationalState = 1;
+  let points = 0;
   const gameBoardContainer = document.getElementById("gameBoard");
   const dimensions = {
     rows: 20,
@@ -361,6 +361,7 @@
   };
 
   const checkRows = () => {
+    let rowsCleared = 0;
     for (let row = dimensions.rows - 1; row >= 0; row--) {
       let rowCounter = 0;
       for (let col = 0; col < dimensions.columns; col++) {
@@ -372,8 +373,28 @@
         clearRow(row);
         shiftBoardDown(row);
         row++;
+        rowsCleared++;
       }
     }
+    givePoints(rowsCleared);
+  };
+
+  const givePoints = (rowsCleared) => {
+    switch (rowsCleared) {
+      case 1:
+        points += 40;
+        break;
+      case 2:
+        points += 100;
+        break;
+      case 3:
+        points += 300;
+        break;
+      case 4:
+        points += 1200;
+        break;
+    }
+    document.getElementById("points").textContent = points;
   };
 
   const shiftBoardDown = (clearedRow) => {
@@ -764,6 +785,7 @@
       .addEventListener("click", gameStartHandler);
     document.addEventListener("keydown", handlePlayerInput);
     document.addEventListener("keyup", resetSpeed);
+    document.getElementById("points").textContent = points;
     window.onkeydown = (e) => !(e.key === " " && e.target == document.body);
   })();
 })();

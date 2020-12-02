@@ -89,6 +89,24 @@ body {
   background-color: #ffc36d;
 }
 
+.pointsContainer {
+  position: absolute;
+  top: 20vh;
+  left: 13vw;
+  border: 1px solid black;
+  border-radius: 10px;
+  font-size: 1.5rem;
+}
+
+#pointsRow {
+  margin: 0;
+  padding: 10px;
+}
+
+#points {
+  margin-left: 5px;
+}
+
 #btns {
   display: flex;
   justify-content: space-around;
