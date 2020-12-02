@@ -345,9 +345,11 @@
   };
 
   const gameStartHandler = () => {
-    gameStarted = true;
-    drawingMode = true;
-    gameClock();
+    if (!gameOver) {
+      gameStarted = true;
+      drawingMode = true;
+      gameClock();
+    }
   };
 
   const gameOverHandler = () => {
@@ -425,7 +427,6 @@
     for (let i = 0; i < dimensions.pieceSize; i++) {
       document.getElementById(getCellId(col, i)).classList.add("moving");
       document.getElementById(getCellId(col, i)).classList.add("cyan");
-
       gameGrid[col][i] = 1;
     }
     fallingPiece = "st";
@@ -435,13 +436,11 @@
     for (let i = 0; i < dimensions.pieceSize / 2; i++) {
       document.getElementById(getCellId(col, i)).classList.add("moving");
       document.getElementById(getCellId(col, i)).classList.add("yellow");
-
       gameGrid[col][i] = 1;
     }
     for (let i = 0; i < dimensions.pieceSize / 2; i++) {
       document.getElementById(getCellId(col + 1, i)).classList.add("moving");
       document.getElementById(getCellId(col + 1, i)).classList.add("yellow");
-
       gameGrid[col + 1][i] = 1;
     }
     fallingPiece = "sq";
@@ -451,7 +450,6 @@
     for (let i = 0; i < dimensions.pieceSize - 1; i++) {
       document.getElementById(getCellId(col, i)).classList.add("moving");
       document.getElementById(getCellId(col, i)).classList.add("orange");
-
       gameGrid[col][i] = 1;
     }
     document.getElementById(getCellId(col + 1, 2)).classList.add("moving");
@@ -465,12 +463,10 @@
     for (let i = 0; i < dimensions.pieceSize - 1; i++) {
       document.getElementById(getCellId(col, i)).classList.add("moving");
       document.getElementById(getCellId(col, i)).classList.add("green");
-
       gameGrid[col][i] = 1;
     }
     document.getElementById(getCellId(col - 1, 2)).classList.add("moving");
     document.getElementById(getCellId(col - 1, 2)).classList.add("green");
-
     gameGrid[col - 1][2] = 1;
     fallingPiece = "ml";
   };
@@ -479,12 +475,10 @@
     for (let i = 0; i < dimensions.pieceSize - 1; i++) {
       document.getElementById(getCellId(col, i)).classList.add("moving");
       document.getElementById(getCellId(col, i)).classList.add("blue");
-
       gameGrid[col][i] = 1;
     }
     document.getElementById(getCellId(col - 1, 1)).classList.add("moving");
     document.getElementById(getCellId(col - 1, 1)).classList.add("blue");
-
     gameGrid[col - 1][1] = 1;
     fallingPiece = "tt";
   };
@@ -493,7 +487,6 @@
     for (let i = 0; i < dimensions.pieceSize / 2; i++) {
       document.getElementById(getCellId(col, i)).classList.add("moving");
       document.getElementById(getCellId(col, i)).classList.add("purple");
-
       gameGrid[col][i] = 1;
     }
     for (let i = 0; i < dimensions.pieceSize / 2; i++) {
@@ -512,7 +505,6 @@
     for (let i = 0; i < dimensions.pieceSize / 2; i++) {
       document.getElementById(getCellId(col, i)).classList.add("moving");
       document.getElementById(getCellId(col, i)).classList.add("red");
-
       gameGrid[col][i] = 1;
     }
     for (let i = 0; i < dimensions.pieceSize / 2; i++) {
