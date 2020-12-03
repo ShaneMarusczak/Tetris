@@ -23,7 +23,7 @@
       src="https://marusczak.com/BuildingBlocks/js/closableModal.min.js"
       defer
     ></script>
-    <script src="js/tetris.min.js" defer></script>
+    <script src="js/tetris.js" defer></script>
   </head>
   <body>
     <header>
@@ -44,6 +44,11 @@
       /></a>
     </header>
     <main>
+      <div class="nextPieceContainer">
+        <p id="nextPieceText">Next Piece</p>
+        <img id="nextPieceImage" class="hidden" src="" alt="" />
+        <div id="nextPieceGrid"></div>
+      </div>
       <div class="pointsContainer">
         <p id="pointsRow">Points:<span id="points"></span></p>
       </div>

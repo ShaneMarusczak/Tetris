@@ -7,6 +7,7 @@
   let fallingPiece = "";
   let fallingPieceRotationalState = 1;
   let points = 0;
+  let nextTetrimino = window.randomIntFromInterval(0, 6);
   const gameBoardContainer = document.getElementById("gameBoard");
   const dimensions = {
     rows: 20,
@@ -351,6 +352,7 @@
     if (!gameOver) {
       gameStarted = true;
       drawingMode = true;
+      document.getElementById("nextPieceImage").classList.remove("hidden");
       gameClock();
     }
   };
@@ -541,9 +543,45 @@
     fallingPiece = "mz";
   };
 
+  const getTetriminoToDraw = () => {
+    let rv = nextTetrimino;
+    do {
+      nextTetrimino = window.randomIntFromInterval(0, 6);
+    } while (nextTetrimino === rv);
+    showNextTetrimino();
+    return rv;
+  };
+
+  const showNextTetrimino = () => {
+    const img = document.getElementById("nextPieceImage");
+    switch (nextTetrimino) {
+      case 0:
+        img.src = "images/st.jpeg";
+        break;
+      case 1:
+        img.src = "images/sq.jpeg";
+        break;
+      case 2:
+        img.src = "images/rl.png";
+        break;
+      case 3:
+        img.src = "images/tt.png";
+        break;
+      case 4:
+        img.src = "images/ml.png";
+        break;
+      case 5:
+        img.src = "images/rz.png";
+        break;
+      case 6:
+        img.src = "images/mz.png";
+        break;
+    }
+  };
+
   const drawPiece = () => {
     const col = 2;
-    const tetriminoToDraw = window.randomIntFromInterval(0, 6);
+    const tetriminoToDraw = getTetriminoToDraw();
     if (checkGameOver(tetriminoToDraw)) {
       gameOverHandler();
       return;

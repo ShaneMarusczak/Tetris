@@ -89,13 +89,34 @@ body {
   background-color: #ffc36d;
 }
 
-.pointsContainer {
+.nextPieceContainer {
   position: absolute;
   top: 20vh;
   left: 13vw;
   border: 1px solid black;
   border-radius: 10px;
+  width: 150px;
+  height: 225px;
+  background-color: var(--my-grey);
+  text-align: center;
+}
+
+.pointsContainer {
+  position: absolute;
+  top: 50vh;
+  left: 13vw;
+  border: 1px solid black;
+  border-radius: 10px;
   font-size: 1.5rem;
+}
+
+#nextPieceImage {
+  max-height: 150px;
+  max-width: 100px;
+}
+
+.hidden {
+  display: none;
 }
 
 #pointsRow {
