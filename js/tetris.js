@@ -421,6 +421,7 @@
             .getElementById(getCellId(col, row))
             .classList.remove("placed");
           gameGrid[col][row] = 0;
+          removeColors(document.getElementById(getCellId(col, row)));
         }
       }
     }
