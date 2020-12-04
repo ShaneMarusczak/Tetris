@@ -825,10 +825,10 @@
     document.addEventListener("keydown", handlePlayerInput);
     document.addEventListener("keyup", resetSpeed);
     document.getElementById("points").textContent = points;
-    window.onkeydown = (e) => !(e.key === " " && e.target == document.body);
     window.onkeydown = (e) =>
-      !(e.key === "ArrowUp" && e.target == document.body);
-    window.onkeydown = (e) =>
-      !(e.key === "ArrowDown" && e.target == document.body);
+      !(
+        (e.key === " " || e.key === "ArrowUp" || e.key === "ArrowDown") &&
+        e.target == document.body
+      );
   })();
 })();
