@@ -35,7 +35,7 @@
       case "r":
       case "R":
       case "ArrowUp":
-        if (!fallingMode) {
+        if (!fallingMode || fallingPiece === "sq") {
           break;
         }
         rotate();
