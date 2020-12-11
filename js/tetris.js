@@ -8,6 +8,8 @@
   let fallingPieceRotationalState = 1;
   let points = 0;
   let nextTetrimino = window.randomIntFromInterval(0, 6);
+  let heldTetrimino = "";
+  let canHoldTetrimino = true;
   const gameBoardContainer = document.getElementById("gameBoard");
   const dimensions = {
     rows: 20,
@@ -40,6 +42,8 @@
         }
         rotate();
         break;
+      case "h":
+        holdTetrimino();
     }
   };
 
@@ -436,9 +440,11 @@
 
   const gameClock = () => {
     if (drawingMode) {
-      drawPiece();
+      drawPiece(false);
+      canHoldTetrimino = true;
     } else if (fallingMode) {
       movePiece();
+      canHoldTetrimino = false;
     }
     if (placingMode) {
       placePiece();
@@ -544,6 +550,63 @@
     fallingPiece = "mz";
   };
 
+  const clearMovingTetrimino = () => {
+    const movingCells = cellsMoving();
+    movingCells.forEach((item) => {
+      const [col, row] = getRowAndCol(item.id);
+      removeColors(item);
+      item.classList.remove("moving");
+      gameGrid[col][row] = 0;
+    });
+  };
+
+  const holdTetrimino = () => {
+    if (canHoldTetrimino) {
+      canHoldTetrimino = false;
+      document.getElementById("heldPieceImage").classList.remove("hidden");
+
+      clearMovingTetrimino();
+      if (heldTetrimino === "") {
+        heldTetrimino = fallingPiece;
+        showHeldImage();
+        drawPiece(false, heldTetrimino);
+      } else {
+        const tempHeld = heldTetrimino;
+        heldTetrimino = fallingPiece;
+
+        drawPiece(true, tempHeld);
+        showHeldImage();
+      }
+    }
+  };
+
+  const showHeldImage = () => {
+    const img = document.getElementById("heldPieceImage");
+    switch (heldTetrimino) {
+      case "st":
+        img.src = "images/st.jpeg";
+        break;
+      case "sq":
+        img.src = "images/sq.jpeg";
+        break;
+      case "rl":
+        img.src = "images/rl.png";
+        break;
+      case "tt":
+        img.src = "images/tt.png";
+        break;
+      case "ml":
+        img.src = "images/ml.png";
+        break;
+      case "rz":
+        img.src = "images/rz.png";
+        break;
+      case "mz":
+        img.src = "images/mz.png";
+        break;
+    }
+  };
+
   const getTetriminoToDraw = () => {
     let rv = nextTetrimino;
     do {
@@ -580,33 +643,45 @@
     }
   };
 
-  const drawPiece = () => {
+  const drawPiece = (override, held) => {
     const col = 2;
-    const tetriminoToDraw = getTetriminoToDraw();
+    let tetriminoToDraw;
+    if (override) {
+      tetriminoToDraw = held;
+    } else {
+      tetriminoToDraw = getTetriminoToDraw();
+    }
     if (checkGameOver(tetriminoToDraw)) {
       gameOverHandler();
       return;
     }
     switch (tetriminoToDraw) {
       case 0:
+      case "st":
         drawStraightTetrimino(col);
         break;
       case 1:
+      case "sq":
         drawSquareTetrimno(col);
         break;
       case 2:
+      case "rl":
         drawLTetrimno(col);
         break;
       case 3:
+      case "tt":
         drawTTetrimno(col);
         break;
       case 4:
+      case "ml":
         drawMirroredLTetrimno(col);
         break;
       case 5:
+      case "rz":
         drawZTetrimino(col);
         break;
       case 6:
+      case "mz":
         drawMirroredZTetrimino(col);
         break;
     }

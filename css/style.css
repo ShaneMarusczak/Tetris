@@ -101,6 +101,18 @@ body {
   text-align: center;
 }
 
+.heldPieceContainer {
+  position: absolute;
+  top: 20vh;
+  left: 73vw;
+  border: 1px solid black;
+  border-radius: 10px;
+  width: 150px;
+  height: 225px;
+  background-color: var(--my-grey);
+  text-align: center;
+}
+
 .pointsContainer {
   position: absolute;
   top: 50vh;
@@ -110,7 +122,8 @@ body {
   font-size: 1.5rem;
 }
 
-#nextPieceImage {
+#nextPieceImage,
+#heldPieceImage {
   max-height: 150px;
   max-width: 100px;
 }
