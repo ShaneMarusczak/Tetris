@@ -89,10 +89,13 @@ body {
   background-color: #ffc36d;
 }
 
-.nextPieceContainer {
+#leftSideBox {
   position: absolute;
   top: 20vh;
-  left: 13vw;
+  left: 15vw;
+}
+
+.nextPieceContainer {
   border: 1px solid black;
   border-radius: 10px;
   width: 150px;
@@ -114,9 +117,7 @@ body {
 }
 
 .pointsContainer {
-  position: absolute;
-  top: 50vh;
-  left: 13vw;
+  margin-top: 15px;
   border: 1px solid black;
   border-radius: 10px;
   font-size: 1.5rem;
