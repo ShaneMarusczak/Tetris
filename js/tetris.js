@@ -135,6 +135,7 @@
     }
   };
 
+  //TODO: Unify these functions into one that takes the dirs as argument
   const getMZCells = (locs) => {
     const cells = [];
     if (fallingPieceRotationalState === 1) {
@@ -298,40 +299,32 @@
   const movePieceHorizonal = (dir) => {
     const locations = [];
     const movingCells = cellsMoving();
-    if (dir === -1) {
-      if (movingCells.some((item) => Number(item.id.charAt(0)) === 0)) {
-        return;
-      }
-      let shouldReturn = false;
-      movingCells.forEach((item) => {
-        const [col, row] = getRowAndCol(item.id);
-        if (gameGrid[col - 1][row] === 2) {
-          shouldReturn = true;
-        }
-      });
-      if (shouldReturn) {
+    //checking for gameboard edge
+    if (
+      dir === -1 &&
+      movingCells.some((item) => Number(item.id.charAt(0)) === 0)
+    ) {
+      return;
+    }
+    if (
+      dir === 1 &&
+      movingCells.some(
+        (item) => Number(item.id.charAt(0)) === dimensions.columns - 1
+      )
+    ) {
+      return;
+    }
+
+    //checking for collision with already placed tetrimino
+    for (let cell of movingCells) {
+      const [col, row] = getRowAndCol(cell.id);
+      if (gameGrid[col + dir][row] === 2) {
         return;
       }
     }
-    if (dir === 1) {
-      if (
-        movingCells.some(
-          (item) => Number(item.id.charAt(0)) === dimensions.columns - 1
-        )
-      ) {
-        return;
-      }
-      let shouldReturn = false;
-      movingCells.forEach((item) => {
-        const [col, row] = getRowAndCol(item.id);
-        if (gameGrid[col + 1][row] === 2) {
-          shouldReturn = true;
-        }
-      });
-      if (shouldReturn) {
-        return;
-      }
-    }
+
+    //collecting the locations of the current falling tetrimino
+    //clearing the color and values
     movingCells.forEach((item) => {
       const [col, row] = getRowAndCol(item.id);
       document.getElementById(getCellId(col, row)).classList.remove("moving");
@@ -339,6 +332,7 @@
       locations.push([col, row]);
     });
 
+    //drawing the tetrimino in the new horizontally moved location
     locations.forEach((loc) => {
       document
         .getElementById(getCellId(loc[0] + dir, loc[1]))
