@@ -7,7 +7,7 @@
   --btn-width: 70px;
   --my-grey: rgb(201, 201, 201, 0.4);
   font-family: "Orbitron", sans-serif !important;
-  background-color: grey;
+  background-color: #a9a289;
 }
 
 body {
@@ -31,7 +31,7 @@ body {
 
 #githubicon:hover {
   transform: translateY(-5px);
-  background-color: dimgrey;
+  background-color: azure;
 }
 
 #homeIcon {
@@ -91,8 +91,21 @@ body {
 
 #leftSideBox {
   position: absolute;
+  width: 150px;
   top: 20vh;
   left: 15vw;
+}
+
+h2 {
+  margin-bottom: 10px;
+}
+
+ul {
+  padding-left: 10px;
+}
+
+li {
+  padding: 3px;
 }
 
 .nextPieceContainer {
