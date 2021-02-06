@@ -45,11 +45,11 @@
     </header>
     <main>
       <div id="leftSideBox">
-        <div class="nextPieceContainer">
+        <div class="nextPieceContainer shadowBox">
           <p id="nextPieceText">Next Piece</p>
           <img id="nextPieceImage" class="hidden" src="" alt="" />
         </div>
-        <div class="pointsContainer">
+        <div class="pointsContainer shadowBox">
           <p id="pointsRow">Points:<span id="points"></span></p>
         </div>
         <div class="controls">
@@ -63,16 +63,20 @@
         </div>
       </div>
 
-      <div id="gameBoard"></div>
-      <div class="heldPieceContainer">
+      <div id="gameBoard" class="shadowBox"></div>
+      <div class="heldPieceContainer shadowBox">
         <p id="heldPieceText">Held Piece</p>
         <img id="heldPieceImage" class="hidden" src="" alt="" />
       </div>
     </main>
     <footer>
       <div id="btns">
-        <div id="startBtn" class="btn">Start</div>
-        <div id="startOverBtn" class="btn" onclick="location.reload()">
+        <div id="startBtn" class="btn shadowBox">Start</div>
+        <div
+          id="startOverBtn"
+          class="btn shadowBox"
+          onclick="location.reload()"
+        >
           Start Over
         </div>
       </div>
