@@ -14,7 +14,7 @@
   const dimensions = {
     rows: 20,
     columns: 10,
-    clockSpeed: 1000,
+    clockSpeed: 950,
     pieceSize: 4,
   };
   const gameGrid = [];
@@ -44,6 +44,12 @@
         break;
       case "h":
         holdTetrimino();
+        break;
+      case "ArrowDown":
+        if (fallingMode) {
+          quickDrop();
+        }
+        break;
     }
   };
 
@@ -762,6 +768,68 @@
     });
   };
 
+  const quickDrop = () => {
+    const movingCells = cellsMoving();
+    const locations = [];
+    movingCells.forEach((item) => {
+      const [col, row] = getRowAndCol(item.id);
+      locations.push([col, row]);
+    });
+    while (canMove(locations)) {
+      locations.forEach((loc) => {
+        loc[1] = loc[1] + 1;
+      });
+    }
+    moveSquares(locations);
+  };
+
+  const moveSquares = (locations) => {
+    clearMovingTetrimino();
+    locations.forEach((loc) => {
+      const elem = document.getElementById(getCellId(loc[0], loc[1]));
+
+      elem.classList.add("moving");
+      gameGrid[loc[0]][loc[1]] = 1;
+      let color = "";
+      switch (fallingPiece) {
+        case "st":
+          elem.classList.add("cyan");
+          break;
+        case "sq":
+          elem.classList.add("yellow");
+          break;
+        case "rl":
+          elem.classList.add("orange");
+          break;
+        case "tt":
+          elem.classList.add("blue");
+          break;
+        case "ml":
+          elem.classList.add("green");
+          break;
+        case "rz":
+          elem.classList.add("purple");
+          break;
+        case "mz":
+          elem.classList.add("red");
+          break;
+      }
+    });
+  };
+
+  const canMove = (locs) => {
+    let rv = true;
+    locs.forEach((loc) => {
+      if (
+        loc[1] === dimensions.rows - 1 ||
+        gameGrid[loc[0]][loc[1] + 1] === 2
+      ) {
+        rv = false;
+      }
+    });
+    return rv;
+  };
+
   const checkCanNotMove = (movingCells) => {
     let rv = false;
     movingCells.forEach((mover) => {
@@ -873,6 +941,18 @@
     }
   };
 
+  const toggleControlList = () => {
+    const list = document.getElementById("ctrlList");
+    const btn = document.getElementById("hideBtn");
+    if (list.classList.contains("hidden")) {
+      list.classList.remove("hidden");
+      btn.textContent = "Hide";
+    } else {
+      list.classList.add("hidden");
+      btn.textContent = "Show";
+    }
+  };
+
   (() => {
     for (let i = 0; i < dimensions.columns; i++) {
       const col = document.createElement("div");
@@ -893,6 +973,9 @@
       .addEventListener("click", gameStartHandler);
     document.addEventListener("keydown", handlePlayerInput);
     document.addEventListener("keyup", resetSpeed);
+    document
+      .getElementById("hideBtn")
+      .addEventListener("click", toggleControlList);
     document.getElementById("points").textContent = points;
     window.onkeydown = (e) =>
       !(

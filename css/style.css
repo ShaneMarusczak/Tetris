@@ -22,6 +22,31 @@ body {
   align-items: center;
 }
 
+header {
+  text-align: center;
+}
+
+header > h1 {
+  margin-top: 10px;
+  margin-bottom: 7px;
+}
+
+.controls > h2 {
+  margin-bottom: 5px;
+  text-align: center;
+}
+
+#hideBtn {
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  color: blue;
+}
+
+#hideBtn:hover {
+  cursor: pointer;
+}
+
 #githubicon {
   position: absolute;
   top: 40px;
@@ -97,16 +122,16 @@ body {
 #leftSideBox {
   position: absolute;
   width: 150px;
-  top: 20vh;
-  left: 15vw;
-}
-
-h2 {
-  margin-bottom: 10px;
+  top: 18vh;
+  left: 19vw;
 }
 
 ul {
-  padding-left: 10px;
+  margin-top: 3px;
+  padding-top: 5px;
+  padding-left: 25px;
+  border: 1px solid black;
+  border-radius: 10px;
 }
 
 li {
@@ -124,8 +149,8 @@ li {
 
 .heldPieceContainer {
   position: absolute;
-  top: 20vh;
-  left: 73vw;
+  top: 18vh;
+  right: 19vw;
   border: 1px solid black;
   border-radius: 10px;
   width: 150px;
@@ -135,9 +160,6 @@ li {
 }
 
 .pointsContainer {
-  margin-top: 15px;
-  border: 1px solid black;
-  border-radius: 10px;
   font-size: 1.5rem;
 }
 
