@@ -10,6 +10,7 @@
   let nextTetrimino = window.randomIntFromInterval(0, 6);
   let heldTetrimino = "";
   let canHoldTetrimino = true;
+  let canHighlight = true;
   const gameBoardContainer = document.getElementById("gameBoard");
   const dimensions = {
     rows: 20,
@@ -129,6 +130,7 @@
       }
       rotateCells(cellsTo, "red");
     }
+    highlightStopCells();
   };
 
   const rotateCells = (cellsTo, color) => {
@@ -350,6 +352,7 @@
       );
       gameGrid[loc[0] + dir][loc[1]] = 1;
     });
+    highlightStopCells();
   };
 
   const gameStartHandler = () => {
@@ -440,6 +443,7 @@
 
   const gameClock = () => {
     if (drawingMode) {
+      canHighlight = true;
       drawPiece(false);
       canHoldTetrimino = true;
     } else if (fallingMode) {
@@ -687,6 +691,7 @@
     }
     drawingMode = false;
     fallingMode = true;
+    highlightStopCells();
   };
 
   const checkGameOver = (tetriminoToDraw) => {
@@ -741,6 +746,7 @@
       );
     }
   };
+
   const movePiece = () => {
     const movingCells = cellsMoving();
     if (checkCanNotMove(movingCells)) {
@@ -766,9 +772,12 @@
         "moving"
       );
     });
+    highlightStopCells();
   };
 
   const quickDrop = () => {
+    canHighlight = false;
+    clearDropHighlight();
     const movingCells = cellsMoving();
     const locations = [];
     movingCells.forEach((item) => {
@@ -953,6 +962,62 @@
     }
   };
 
+  const clearDropHighlight = () => {
+    Array.from(document.querySelectorAll(".flashOn")).forEach((elem) => {
+      elem.parentElement.classList.add("dropLocation");
+      elem.classList.remove("flashOn");
+    });
+  };
+
+  const highlightStopCells = () => {
+    if (canHighlight) {
+      const movingCells = cellsMoving();
+      const locations = [];
+      const origLocs = [];
+      movingCells.forEach((item) => {
+        const [col, row] = getRowAndCol(item.id);
+        locations.push([col, row]);
+        origLocs.push([col, row]);
+      });
+      let maxRow = 0;
+      for (const loc of locations) {
+        if (loc[1] > maxRow) {
+          maxRow = loc[1];
+        }
+      }
+      if (stopHighlighting(origLocs, maxRow)) {
+        canHighlight = false;
+        clearDropHighlight();
+        return;
+      }
+      while (canMove(locations)) {
+        locations.forEach((loc) => {
+          loc[1] = loc[1] + 1;
+        });
+      }
+      clearDropHighlight();
+      locations.forEach((loc) => {
+        const elem = document.getElementById(getCellId(loc[0], loc[1]));
+        elem.classList.add("dropLocation");
+        elem.firstChild.classList.add("flashOn");
+      });
+    }
+  };
+
+  const stopHighlighting = (locations, maxRow) => {
+    const height = locations[3][1] - locations[0][1];
+    if (maxRow + height >= dimensions.rows - 1) {
+      return true;
+    }
+    for (const loc of locations) {
+      const elemToCheck = document.getElementById(getCellId(loc[0], loc[1]));
+      if (elemToCheck.classList.contains("dropLocation")) {
+        return true;
+      }
+    }
+    return false;
+  };
+
   (() => {
     for (let i = 0; i < dimensions.columns; i++) {
       const col = document.createElement("div");
@@ -966,6 +1031,10 @@
         cell.classList.add("cell");
         col.appendChild(cell);
         gameGrid[i].push(0);
+        const flash = document.createElement("div");
+        flash.id = "f" + i + "-" + j;
+        flash.classList.add("flash");
+        cell.appendChild(flash);
       }
     }
     document

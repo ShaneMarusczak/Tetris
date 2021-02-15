@@ -188,6 +188,15 @@ li {
   margin-top: 10px;
 }
 
+.flash {
+  height: inherit;
+  width: inherit;
+}
+
+.flashOn {
+  background-color: RGBA(240, 255, 255, 0.7);
+}
+
 .btn {
   display: flex;
   justify-content: center;
