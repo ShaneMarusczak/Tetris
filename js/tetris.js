@@ -10,7 +10,6 @@
   let nextTetrimino = window.randomIntFromInterval(0, 6);
   let heldTetrimino = "";
   let canHoldTetrimino = true;
-  let canHighlight = true;
   const gameBoardContainer = document.getElementById("gameBoard");
   const dimensions = {
     rows: 20,
@@ -443,7 +442,6 @@
 
   const gameClock = () => {
     if (drawingMode) {
-      canHighlight = true;
       drawPiece(false);
       canHoldTetrimino = true;
     } else if (fallingMode) {
@@ -776,7 +774,6 @@
   };
 
   const quickDrop = () => {
-    canHighlight = false;
     clearDropHighlight();
     const movingCells = cellsMoving();
     const locations = [];
@@ -824,19 +821,6 @@
           break;
       }
     });
-  };
-
-  const canMove = (locs) => {
-    let rv = true;
-    locs.forEach((loc) => {
-      if (
-        loc[1] === dimensions.rows - 1 ||
-        gameGrid[loc[0]][loc[1] + 1] === 2
-      ) {
-        rv = false;
-      }
-    });
-    return rv;
   };
 
   const checkCanNotMove = (movingCells) => {
@@ -969,8 +953,21 @@
     });
   };
 
+  const canMove = (locs) => {
+    let rv = true;
+    locs.forEach((loc) => {
+      if (
+        loc[1] === dimensions.rows - 1 ||
+        gameGrid[loc[0]][loc[1] + 1] === 2
+      ) {
+        rv = false;
+      }
+    });
+    return rv;
+  };
+
   const highlightStopCells = () => {
-    if (canHighlight) {
+    if (fallingMode) {
       const movingCells = cellsMoving();
       const locations = [];
       const origLocs = [];
@@ -985,15 +982,14 @@
           maxRow = loc[1];
         }
       }
-      if (stopHighlighting(origLocs, maxRow)) {
-        canHighlight = false;
-        clearDropHighlight();
-        return;
-      }
       while (canMove(locations)) {
         locations.forEach((loc) => {
           loc[1] = loc[1] + 1;
         });
+      }
+      if (stopHighlighting(origLocs, locations)) {
+        clearDropHighlight();
+        return;
       }
       clearDropHighlight();
       locations.forEach((loc) => {
@@ -1004,15 +1000,12 @@
     }
   };
 
-  const stopHighlighting = (locations, maxRow) => {
-    const height = locations[3][1] - locations[0][1];
-    if (maxRow + height >= dimensions.rows - 1) {
-      return true;
-    }
+  const stopHighlighting = (locations, ghostLocations) => {
     for (const loc of locations) {
-      const elemToCheck = document.getElementById(getCellId(loc[0], loc[1]));
-      if (elemToCheck.classList.contains("dropLocation")) {
-        return true;
+      for (const gloc of ghostLocations) {
+        if (loc[0] == gloc[0] && loc[1] == gloc[1]) {
+          return true;
+        }
       }
     }
     return false;
