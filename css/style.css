@@ -191,12 +191,21 @@ li {
 .flash {
   height: inherit;
   width: inherit;
+  overflow: hidden;
 }
 
 .flashOn {
-  background-color: RGBA(0, 0, 0, 0.1);
-  outline: 16px solid RGBA(0, 0, 0, 0.25);
-  outline-offset: -19px;
+  background-color: RGBA(0, 0, 0, 0.15);
+}
+
+.innerFlash {
+  width: 30px;
+  height: 30px;
+  margin: 2.5px;
+}
+
+.flashOnInner {
+  background-color: RGBA(0, 0, 0, 0.2);
 }
 
 .btn {

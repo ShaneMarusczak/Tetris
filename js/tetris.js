@@ -949,6 +949,7 @@
   const clearDropHighlight = () => {
     Array.from(document.querySelectorAll(".flashOn")).forEach((elem) => {
       elem.classList.remove("flashOn");
+      elem.firstChild.classList.remove("flashOnInner");
     });
   };
 
@@ -994,6 +995,7 @@
       locations.forEach((loc) => {
         const elem = document.getElementById(getCellId(loc[0], loc[1]));
         elem.firstChild.classList.add("flashOn");
+        elem.firstChild.firstChild.classList.add("flashOnInner");
       });
     }
   };
@@ -1026,6 +1028,9 @@
         flash.id = "f" + i + "-" + j;
         flash.classList.add("flash");
         cell.appendChild(flash);
+        const innerFlash = document.createElement("div");
+        innerFlash.classList.add("innerFlash");
+        flash.appendChild(innerFlash);
       }
     }
     document
