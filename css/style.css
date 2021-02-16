@@ -206,16 +206,7 @@ li {
 }
 
 .flashOn {
-  background-color: RGBA(0, 0, 0, 0.15);
-}
-
-.innerFlash {
-  width: 29.5px;
-  height: 29.5px;
-}
-
-.flashOnInner {
-  background-color: RGBA(0, 0, 0, 0.2);
+  background-color: RGBA(0, 0, 0, 0.25);
 }
 
 .btn {
