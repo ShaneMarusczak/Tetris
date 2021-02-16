@@ -196,7 +196,7 @@ li {
 .flashOn {
   background-color: RGBA(0, 0, 0, 0.1);
   outline: 16px solid RGBA(0, 0, 0, 0.25);
-  outline-offset: -18px;
+  outline-offset: -19px;
 }
 
 .btn {
