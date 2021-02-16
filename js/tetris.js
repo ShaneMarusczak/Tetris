@@ -948,22 +948,21 @@
 
   const clearDropHighlight = () => {
     Array.from(document.querySelectorAll(".flashOn")).forEach((elem) => {
-      elem.parentElement.classList.add("dropLocation");
       elem.classList.remove("flashOn");
     });
   };
 
   const canMove = (locs) => {
     let rv = true;
-    locs.forEach((loc) => {
+    for (const loc of locs) {
       if (
         loc[1] === dimensions.rows - 1 ||
         gameGrid[loc[0]][loc[1] + 1] === 2
       ) {
-        rv = false;
+        return false;
       }
-    });
-    return rv;
+    }
+    return true;
   };
 
   const highlightStopCells = () => {
@@ -994,7 +993,6 @@
       clearDropHighlight();
       locations.forEach((loc) => {
         const elem = document.getElementById(getCellId(loc[0], loc[1]));
-        elem.classList.add("dropLocation");
         elem.firstChild.classList.add("flashOn");
       });
     }
