@@ -89,6 +89,10 @@ header > h1 {
   width: var(--cell-width);
   border: 0.5px dimgrey solid;
   background-color: var(--my-grey);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .blue {
@@ -188,6 +192,10 @@ li {
   margin-top: 10px;
 }
 
+.col {
+  align-items: center;
+}
+
 .flash {
   height: inherit;
   width: inherit;
@@ -202,8 +210,8 @@ li {
 }
 
 .innerFlash {
-  width: 30px;
-  height: 30px;
+  width: 29.5px;
+  height: 29.5px;
 }
 
 .flashOnInner {
