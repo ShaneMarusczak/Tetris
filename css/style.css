@@ -195,7 +195,7 @@ li {
 
 .flashOn {
   background-color: RGBA(0, 0, 0, 0.1);
-  outline: 15px solid RGBA(0, 0, 0, 0.25);
+  outline: 15.25px solid RGBA(0, 0, 0, 0.25);
   outline-offset: -18px;
 }
 
