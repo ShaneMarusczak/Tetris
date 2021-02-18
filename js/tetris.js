@@ -1,4 +1,5 @@
 (() => {
+  let storedClockSpeed = 950;
   let gameStarted = false;
   let gameOver = false;
   let drawingMode = false;
@@ -10,11 +11,12 @@
   let nextTetrimino = window.randomIntFromInterval(0, 6);
   let heldTetrimino = "";
   let canHoldTetrimino = true;
+  let peicesDrawn = 0;
   const gameBoardContainer = document.getElementById("gameBoard");
   const dimensions = {
     rows: 20,
     columns: 10,
-    clockSpeed: 950,
+    clockSpeed: storedClockSpeed,
     pieceSize: 4,
   };
   const gameGrid = [];
@@ -299,7 +301,7 @@
 
   const resetSpeed = (e) => {
     if (e.key === " ") {
-      dimensions.clockSpeed = 1000;
+      dimensions.clockSpeed = storedClockSpeed;
     }
   };
 
@@ -440,10 +442,28 @@
     }
   };
 
+  const speedUpGame = () => {
+    if (peicesDrawn === 20) {
+      storedClockSpeed = 850;
+      dimensions.clockSpeed = storedClockSpeed;
+    } else if (peicesDrawn === 35) {
+      storedClockSpeed = 750;
+      dimensions.clockSpeed = storedClockSpeed;
+    } else if (peicesDrawn === 55) {
+      storedClockSpeed = 600;
+      dimensions.clockSpeed = storedClockSpeed;
+    } else if (peicesDrawn === 110) {
+      storedClockSpeed = 400;
+      dimensions.clockSpeed = storedClockSpeed;
+    }
+  };
+
   const gameClock = () => {
     if (drawingMode) {
       drawPiece(false);
       canHoldTetrimino = true;
+      peicesDrawn++;
+      speedUpGame();
     } else if (fallingMode) {
       movePiece();
       canHoldTetrimino = false;
