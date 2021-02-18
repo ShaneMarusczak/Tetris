@@ -11,6 +11,7 @@
   let nextTetrimino = window.randomIntFromInterval(0, 6);
   let heldTetrimino = "";
   let canHoldTetrimino = true;
+  let canMoveHor = true;
   let peicesDrawn = 0;
   const gameBoardContainer = document.getElementById("gameBoard");
   const dimensions = {
@@ -28,10 +29,14 @@
   const handlePlayerInput = (e) => {
     switch (e.key) {
       case "ArrowLeft":
-        movePieceHorizonal(-1);
+        if (canMoveHor) {
+          movePieceHorizonal(-1);
+        }
         break;
       case "ArrowRight":
-        movePieceHorizonal(1);
+        if (canMoveHor) {
+          movePieceHorizonal(1);
+        }
         break;
       case " ":
         speedUpDrop();
@@ -462,6 +467,7 @@
     if (drawingMode) {
       drawPiece(false);
       canHoldTetrimino = true;
+      canMoveHor = true;
       peicesDrawn++;
       speedUpGame();
     } else if (fallingMode) {
@@ -807,6 +813,7 @@
       });
     }
     moveSquares(locations);
+    canMoveHor = false;
   };
 
   const moveSquares = (locations) => {
