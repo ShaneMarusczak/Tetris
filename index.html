@@ -1,6 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Mono&family=Roboto:wght@500&display=swap"
+      rel="stylesheet"
+    />
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <meta name="Description" content="Play the classic game Tetris!" />
@@ -51,7 +57,7 @@
       <div id="leftSideBox">
         <div class="nextPieceContainer shadowBox">
           <p id="nextPieceText">Next Piece</p>
-          <img id="nextPieceImage" class="hidden" src="" alt="" />
+          <div class="miniBoard" id="nextPeice"></div>
         </div>
         <div class="controls">
           <h2>Controls</h2>
@@ -69,7 +75,7 @@
       <div id="gameBoard" class="shadowBox"></div>
       <div class="heldPieceContainer shadowBox">
         <p id="heldPieceText">Held Piece</p>
-        <img id="heldPieceImage" class="hidden" src="" alt="" />
+        <div class="miniBoard" id="heldPeice"></div>
       </div>
     </main>
     <footer>
@@ -83,7 +89,7 @@
           Start Over
         </div>
       </div>
-      <p id="updateText" title="10:31 AM">Last Updated: February 18, 2021</p>
+      <p id="updateText" title="7:32 PM">Last Updated: August 7, 2021</p>
     </footer>
   </body>
 </html>

@@ -365,7 +365,6 @@
     if (!gameOver) {
       gameStarted = true;
       drawingMode = true;
-      document.getElementById("nextPieceImage").classList.remove("hidden");
       gameClock();
     }
   };
@@ -578,6 +577,84 @@
     fallingPiece = "mz";
   };
 
+  const drawStraightTetriminoMini = (col, which) => {
+    for (let i = 0; i < dimensions.pieceSize; i++) {
+      document.getElementById(getCellId(col, i) + which).classList.add("cyan");
+    }
+  };
+
+  const drawSquareTetrimnoMini = (col, which) => {
+    for (let i = 0; i < dimensions.pieceSize / 2; i++) {
+      document
+        .getElementById(getCellId(col, i + 1) + which)
+        .classList.add("yellow");
+    }
+    for (let i = 0; i < dimensions.pieceSize / 2; i++) {
+      document
+        .getElementById(getCellId(col + 1, i + 1) + which)
+        .classList.add("yellow");
+    }
+  };
+
+  const drawLTetrimnoMini = (col, which) => {
+    for (let i = 0; i < dimensions.pieceSize - 1; i++) {
+      document
+        .getElementById(getCellId(col, i + 1) + which)
+        .classList.add("orange");
+    }
+    document
+      .getElementById(getCellId(col + 1, 3) + which)
+      .classList.add("orange");
+  };
+
+  const drawMirroredLTetrimnoMini = (col, which) => {
+    for (let i = 0; i < dimensions.pieceSize - 1; i++) {
+      document
+        .getElementById(getCellId(col, i + 1) + which)
+        .classList.add("green");
+    }
+    document
+      .getElementById(getCellId(col - 1, 3) + which)
+      .classList.add("green");
+  };
+
+  const drawTTetrimnoMini = (col, which) => {
+    for (let i = 0; i < dimensions.pieceSize - 1; i++) {
+      document
+        .getElementById(getCellId(col, i + 1) + which)
+        .classList.add("blue");
+    }
+    document
+      .getElementById(getCellId(col - 1, 2) + which)
+      .classList.add("blue");
+  };
+
+  const drawZTetriminoMini = (col, which) => {
+    for (let i = 0; i < dimensions.pieceSize / 2; i++) {
+      document
+        .getElementById(getCellId(col, i + 1) + which)
+        .classList.add("purple");
+    }
+    for (let i = 0; i < dimensions.pieceSize / 2; i++) {
+      document
+        .getElementById(getCellId(col + 1, i + 2) + which)
+        .classList.add("purple");
+    }
+  };
+
+  const drawMirroredZTetriminoMini = (col, which) => {
+    for (let i = 0; i < dimensions.pieceSize / 2; i++) {
+      document
+        .getElementById(getCellId(col, i + 1) + which)
+        .classList.add("red");
+    }
+    for (let i = 0; i < dimensions.pieceSize / 2; i++) {
+      document
+        .getElementById(getCellId(col - 1, i + 2) + which)
+        .classList.add("red");
+    }
+  };
+
   const clearMovingTetrimino = () => {
     const movingCells = cellsMoving();
     movingCells.forEach((item) => {
@@ -591,8 +668,6 @@
   const holdTetrimino = () => {
     if (canHoldTetrimino) {
       canHoldTetrimino = false;
-      document.getElementById("heldPieceImage").classList.remove("hidden");
-
       clearMovingTetrimino();
       if (heldTetrimino === "") {
         heldTetrimino = fallingPiece;
@@ -601,7 +676,6 @@
       } else {
         const tempHeld = heldTetrimino;
         heldTetrimino = fallingPiece;
-
         drawPiece(true, tempHeld);
         showHeldImage();
       }
@@ -609,28 +683,29 @@
   };
 
   const showHeldImage = () => {
-    const img = document.getElementById("heldPieceImage");
+    clearMiniBoard("heldPeice");
+
     switch (heldTetrimino) {
       case "st":
-        img.src = "images/st.jpeg";
+        drawStraightTetriminoMini(1, "-h");
         break;
       case "sq":
-        img.src = "images/sq.jpeg";
+        drawSquareTetrimnoMini(1, "-h");
         break;
       case "rl":
-        img.src = "images/rl.png";
+        drawLTetrimnoMini(1, "-h");
         break;
       case "tt":
-        img.src = "images/tt.png";
+        drawTTetrimnoMini(2, "-h");
         break;
       case "ml":
-        img.src = "images/ml.png";
+        drawMirroredLTetrimnoMini(2, "-h");
         break;
       case "rz":
-        img.src = "images/rz.png";
+        drawZTetriminoMini(1, "-h");
         break;
       case "mz":
-        img.src = "images/mz.png";
+        drawMirroredZTetriminoMini(2, "-h");
         break;
     }
   };
@@ -645,30 +720,36 @@
   };
 
   const showNextTetrimino = () => {
-    const img = document.getElementById("nextPieceImage");
+    clearMiniBoard("nextPeice");
     switch (nextTetrimino) {
       case 0:
-        img.src = "images/st.jpeg";
+        drawStraightTetriminoMini(1, "-n");
         break;
       case 1:
-        img.src = "images/sq.jpeg";
+        drawSquareTetrimnoMini(1, "-n");
         break;
       case 2:
-        img.src = "images/rl.png";
+        drawLTetrimnoMini(1, "-n");
         break;
       case 3:
-        img.src = "images/tt.png";
+        drawTTetrimnoMini(2, "-n");
         break;
       case 4:
-        img.src = "images/ml.png";
+        drawMirroredLTetrimnoMini(2, "-n");
         break;
       case 5:
-        img.src = "images/rz.png";
+        drawZTetriminoMini(1, "-n");
         break;
       case 6:
-        img.src = "images/mz.png";
+        drawMirroredZTetriminoMini(2, "-n");
         break;
     }
+  };
+
+  const clearMiniBoard = (id) => {
+    Array.from(document.getElementById(id).children).forEach((col) => {
+      Array.from(col.children).forEach((elem) => removeColors(elem));
+    });
   };
 
   const drawPiece = (override, held) => {
@@ -1055,6 +1136,35 @@
         cell.appendChild(flash);
       }
     }
+    const nextPeice = document.getElementById("nextPeice");
+    const heldPeice = document.getElementById("heldPeice");
+
+    for (let i = 0; i < 4; i++) {
+      const col = document.createElement("div");
+      col.id = "col-" + i + "-n";
+      col.classList.add("col");
+      nextPeice.appendChild(col);
+      for (let j = 0; j < 4; j++) {
+        const cell = document.createElement("div");
+        cell.id = i + "-" + j + "-n";
+        cell.classList.add("cell");
+        col.appendChild(cell);
+      }
+    }
+
+    for (let i = 0; i < 4; i++) {
+      const col = document.createElement("div");
+      col.id = "col-" + i + "-h";
+      col.classList.add("col");
+      heldPeice.appendChild(col);
+      for (let j = 0; j < 4; j++) {
+        const cell = document.createElement("div");
+        cell.id = i + "-" + j + "-h";
+        cell.classList.add("cell");
+        col.appendChild(cell);
+      }
+    }
+
     document
       .getElementById("startBtn")
       .addEventListener("click", gameStartHandler);
