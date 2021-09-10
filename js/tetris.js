@@ -50,6 +50,7 @@
         rotate();
         break;
       case "h":
+      case "H":
         holdTetrimino();
         break;
       case "ArrowDown":
