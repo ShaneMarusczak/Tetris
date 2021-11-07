@@ -14,6 +14,7 @@
   let canMoveHor = true;
   let peicesDrawn = 0;
   const gameBoardContainer = document.getElementById("gameBoard");
+  const highScoreOnLoad = Number(window.getCookie("tetrisHighScore"));
   const dimensions = {
     rows: 20,
     columns: 10,
@@ -373,6 +374,10 @@
   const gameOverHandler = () => {
     gameOver = true;
     window.closableModal("Game Over!");
+    if (points > highScoreOnLoad) {
+      window.setCookie("tetrisHighScore", points, 30);
+      document.getElementById("highPoints").textContent = points;
+    }
   };
 
   const checkRows = () => {
@@ -1175,6 +1180,8 @@
       .getElementById("hideBtn")
       .addEventListener("click", toggleControlList);
     document.getElementById("points").textContent = points;
+    document.getElementById("highPoints").textContent =
+      highScoreOnLoad > 0 ? highScoreOnLoad : " No High Score";
     window.onkeydown = (e) =>
       !(
         (e.key === " " || e.key === "ArrowUp" || e.key === "ArrowDown") &&

@@ -235,3 +235,7 @@ ul {
 #ctrlList {
   border: 1px solid black;
 }
+
+#highPointsRow {
+  margin-top: 5px;
+}
