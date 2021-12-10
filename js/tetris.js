@@ -8,13 +8,13 @@
   let fallingPiece = "";
   let fallingPieceRotationalState = 1;
   let points = 0;
-  let nextTetrimino = window.randomIntFromInterval(0, 6);
+  let nextTetrimino = randomIntFromInterval(0, 6);
   let heldTetrimino = "";
   let canHoldTetrimino = true;
   let canMoveHor = true;
   let peicesDrawn = 0;
   const gameBoardContainer = document.getElementById("gameBoard");
-  const highScoreOnLoad = Number(window.getCookie("tetrisHighScore"));
+  const highScoreOnLoad = Number(getCookie("tetrisHighScore"));
   const dimensions = {
     rows: 20,
     columns: 10,
@@ -373,9 +373,9 @@
 
   const gameOverHandler = () => {
     gameOver = true;
-    window.closableModal("Game Over!");
+    closableModal("Game Over!");
     if (points > highScoreOnLoad) {
-      window.setCookie("tetrisHighScore", points, 30);
+      setCookie("tetrisHighScore", points, 30);
       document.getElementById("highPoints").textContent = points;
     }
   };
@@ -421,7 +421,6 @@
     for (let row = dimensions.rows - 1; row >= 0; row--) {
       for (let col = 0; col < dimensions.columns; col++) {
         if (row > clearedRow) {
-          continue;
         } else if (row <= clearedRow && row !== 0) {
           document
             .getElementById(getCellId(col, row))
@@ -470,7 +469,7 @@
 
   const gameClock = () => {
     if (drawingMode) {
-      drawPiece(false);
+      drawPiece(false, null);
       canHoldTetrimino = true;
       canMoveHor = true;
       peicesDrawn++;
@@ -482,7 +481,7 @@
     if (placingMode) {
       placePiece();
     }
-    window.sleep(dimensions.clockSpeed).then(() => {
+    sleep(dimensions.clockSpeed).then(() => {
       if (gameStarted && !gameOver) {
         gameClock();
       }
@@ -719,7 +718,7 @@
   const getTetriminoToDraw = () => {
     let rv = nextTetrimino;
     do {
-      nextTetrimino = window.randomIntFromInterval(0, 6);
+      nextTetrimino = randomIntFromInterval(0, 6);
     } while (nextTetrimino === rv);
     showNextTetrimino();
     return rv;
@@ -910,7 +909,6 @@
 
       elem.classList.add("moving");
       gameGrid[loc[0]][loc[1]] = 1;
-      let color = "";
       switch (fallingPiece) {
         case "st":
           elem.classList.add("cyan");
@@ -1067,7 +1065,6 @@
   };
 
   const canMove = (locs) => {
-    let rv = true;
     for (const loc of locs) {
       if (
         loc[1] === dimensions.rows - 1 ||
@@ -1115,13 +1112,65 @@
   const stopHighlighting = (locations, ghostLocations) => {
     for (const loc of locations) {
       for (const gloc of ghostLocations) {
-        if (loc[0] == gloc[0] && loc[1] == gloc[1]) {
+        if (loc[0] === gloc[0] && loc[1] === gloc[1]) {
           return true;
         }
       }
     }
     return false;
   };
+
+  function randomIntFromInterval(min, max) {
+    return Math.floor(Math.random() * (max - min + 1) + min);
+  }
+
+  function sleep(ms) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  }
+
+  function setCookie(cname, cvalue, exdays) {
+    var d = new Date();
+    d.setTime(d.getTime() + exdays * 24 * 60 * 60 * 1000);
+    var expires = "expires=" + d.toUTCString();
+    document.cookie =
+        cname + "=" + cvalue + ";" + expires + ";path=/;SameSite=Lax";
+  }
+
+  function getCookie(cname) {
+    var name = cname + "=";
+    var decodedCookie = decodeURIComponent(document.cookie);
+    var ca = decodedCookie.split(";");
+    for (var i = 0; i < ca.length; i++) {
+      var c = ca[i];
+      while (c.charAt(0) === " ") {
+        c = c.substring(1);
+      }
+      if (c.indexOf(name) === 0) {
+        return c.substring(name.length, c.length);
+      }
+    }
+    return "";
+  }
+
+  function closableModal(message) {
+    const modalBox = document.createElement("div");
+    modalBox.id = "modal-box";
+    const innerModalBox = document.createElement("div");
+    innerModalBox.id = "inner-modal-box";
+    const modalMessage = document.createElement("span");
+    modalMessage.id = "modal-message";
+    const closeButton = document.createElement("span");
+    closeButton.id = "close-button";
+    closeButton.innerHTML = "&times;";
+    innerModalBox.appendChild(modalMessage);
+    innerModalBox.appendChild(closeButton);
+    modalBox.appendChild(innerModalBox);
+    modalMessage.innerText = message;
+    document.getElementsByTagName("html")[0].appendChild(modalBox);
+    closeButton.addEventListener("click", () => {
+      modalBox.remove();
+    });
+  }
 
   (() => {
     for (let i = 0; i < dimensions.columns; i++) {
@@ -1185,7 +1234,7 @@
     window.onkeydown = (e) =>
       !(
         (e.key === " " || e.key === "ArrowUp" || e.key === "ArrowDown") &&
-        e.target == document.body
+        e.target === document.body
       );
   })();
 })();
