@@ -13,8 +13,8 @@
     <link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
     <meta name="viewport" content="width=800" />
     <title>Tetris</title>
-    <link rel="stylesheet" href="css/style.min.css" />
-    <script src="js/tetris.min.js" defer></script>
+    <link rel="stylesheet" href="css/style.css" />
+    <script type="module" src="js/main.js"></script>
   </head>
   <body>
     <header>
@@ -45,17 +45,17 @@
       <div id="leftSideBox">
         <div class="nextPieceContainer shadowBox">
           <p id="nextPieceText">Next Piece</p>
-          <div class="miniBoard" id="nextPeice"></div>
+          <div class="miniBoard" id="nextPiece"></div>
         </div>
         <div class="controls">
           <h2>Controls</h2>
           <p id="hideBtn">Show</p>
           <div class="shadowBox hidden" id="ctrlList">
             <p>Left and Right arrows move side to side</p>
-            <p>Up Arrow and R roates</p>
-            <p>H holds a peice and swaps in held peice</p>
+            <p>Up Arrow and R rotates</p>
+            <p>H holds a piece and swaps in held piece</p>
             <p>Hold Space Bar to speed up drop</p>
-            <p>Down Arrow drops peice to bottom</p>
+            <p>Down Arrow drops piece to bottom</p>
           </div>
         </div>
       </div>
@@ -63,7 +63,7 @@
       <div id="gameBoard" class="shadowBox"></div>
       <div class="heldPieceContainer shadowBox">
         <p id="heldPieceText">Held Piece</p>
-        <div class="miniBoard" id="heldPeice"></div>
+        <div class="miniBoard" id="heldPiece"></div>
       </div>
     </main>
     <footer>
